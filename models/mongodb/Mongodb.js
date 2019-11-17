@@ -4,3 +4,5 @@ mongoose.connect('mongodb+srv://admin:admin@project1-dybur.azure.mongodb.net/tes
     useNewUrlParser: true
 }).then(db => console.log('DB is Connected'));
 module.exports.mongoose = mongoose;
+
+
