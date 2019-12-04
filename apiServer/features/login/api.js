@@ -1,5 +1,5 @@
 const express=require("express"),
-     router=express.Router()
+     router = express.Router()
 
 
 const user = require('../../../models/mongodb/User');
@@ -7,9 +7,9 @@ router.use(express.static(__dirname+ "/frontend"))
 
 router.route('/')
     .post(function (req, res) {
-        var usernameLogin = req.body.usernameLogin;
-        var passwordLogin = req.body.passwordLogin;
-        user.Login(usernameLogin, passwordLogin, function(result){
+        var username = req.body.username;
+        var password = req.body.password;
+        user.Login(username, password, function(result){
             if(result == false || result == null){
                 res.json({
                     'isValid' : false 
@@ -29,14 +29,13 @@ router.route('/')
           var username = req.body.username;
           var password = req.body.password;
           var name = req.body.name;
-          var avatar = req.body.avatar;
           console.log(username);
           console.log(password);
           var userRegister = new user({
               username : username,
               name: name,
               password: password,
-              avatar: avatar,
+              avatar: " ",
               friend_list : " " ,
               wait_list: ""
           });
@@ -64,6 +63,7 @@ router.route('/')
                 }
           })      
     })
+
     router.get('/resgister/:username', (req, res) =>{
         var username = req.params.username;
         user.CheckUsername(username, function(dataResult){
@@ -78,5 +78,6 @@ router.route('/')
             }
         })
     })
+
 
 module.exports=router
