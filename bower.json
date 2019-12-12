@@ -1,0 +1,22 @@
+{
+  "name": "web-chat",
+  "description": "",
+  "main": "",
+  "authors": [
+    "tuanda <dinhanhtuan293@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/jamemarkdinhtuan/web-chat",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "bootstrap": "^4.4.1",
+    "font-awsome": "^5.12.0"
+  }
+}
