@@ -26,6 +26,7 @@ var UserSchema = new mongoose.Schema({
 var User = mongoose.model('User', UserSchema);
 
 
+// Trả về _id của user vàu tạo
 var CreateUser = function (username, name, password, avatar, done) {
     // Thêm thành công trả về _id user, ngược lại trả về error
     User.findOne({'username': username}, function (err, doc) {
@@ -62,6 +63,7 @@ var CreateUser = function (username, name, password, avatar, done) {
 //     });
 // };
 
+//Trả về _id của user nếu đăng nhập thành công
 var Login = function (username, password, done) {
     // login thành công trả về _id của user, ngược lại trả về false.
     User.findOne({username: username, password: password}, function (err, doc) {
@@ -82,6 +84,8 @@ var CheckUsername = function (username, done) {
     });
 };
 
+
+// Trả về name, avatar, wait_list, friend_list, room_list của user
 var GetInfoUser = function(_idUser, done){
     User.findById(_idUser, 'name avatar friend_list wait_list room_list', function (err, doc) {
         if(err) return done(err);
