@@ -1,8 +1,15 @@
 const express=require("express"),
      router = express.Router()
+const session = require('express-session');
 
 const user = require('../../../models/mongodb/User');
 router.use(express.static(__dirname+ "/frontend"))
+
+router.use(session({
+    resave: true, 
+    saveUninitialized: true, 
+    secret: 'somesecret', 
+    cookie: { maxAge: 60000 }}));
 
 router.route('/')
     .post(function (req, res) {
@@ -15,6 +22,7 @@ router.route('/')
                 })
             }else{
                 var userID = result;
+                req.session.userID = userID; 
                 res.json({
                     'isValid' : true,
                     userID 
@@ -23,7 +31,7 @@ router.route('/')
         })
     })
 
-    router.route('/resgister')
+router.route('/resgister')
     .post(function (req, res) {
           var username = req.body.username;
           var password = req.body.password;
@@ -39,7 +47,7 @@ router.route('/')
               wait_list: ""
           });
 
-          user.CheckUsername(username, function(data){
+    user.CheckUsername(username, function(data){
               if(data == false){
                   user.CreateUser(userRegister, function(result){
                       if(result == null){
@@ -78,5 +86,17 @@ router.route('/')
         })
     })
 
+    router.post('/getUser', (req, res) => {
+        if(req.session.userID){
+            return res.status(200).json({status: 'success'})
+        }
+        return res.status(200).json({status: 'error'})
+    })
+
+    router.post('/logout', (req, res) => {
+        req.session.destroy(function(err) {
+            return res.status(200).json({status: 'success'})
+        })
+    })
 
 module.exports=router
