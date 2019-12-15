@@ -1,7 +1,6 @@
 const express=require("express"),
      router = express.Router()
 
-
 const user = require('../../../models/mongodb/User');
 router.use(express.static(__dirname+ "/frontend"))
 
