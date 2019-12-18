@@ -69,7 +69,7 @@ module.exports = {
     FindUserByName,
     FindUserByUsername,
     CreateUser,
-    UserModel: User,
+    User,
     Login,
     CheckUsername
 };
