@@ -1,7 +1,7 @@
 const express = require('express'),
 router = express.Router();
 
-const Room = require('../../models/mongodb/Room');
+const Room = require('../../backendServer/models/mongodb/Room');
 
 router.route('/listroom')
       .post((req, res) =>{
@@ -20,14 +20,14 @@ router.route('/listroom')
                       message : message
                   })
                   res.json({
-                      'status' : 'susscess'
+                      'status' : 'susscess',
                       result
                   })
               }
           })
           
           })
-      })
+      
 
 module.exports = {
     router
