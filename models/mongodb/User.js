@@ -40,10 +40,7 @@ var FindUserByUsername = function (username, done) {
 };
 
 var FindUserByName = function (name, done) {
-    User.find({name: name}, function (err, doc) {
-        if (err) return console.log(err);
-        return done(doc);
-    });
+    User.find({name: { $regex: /name/, $options: 'ig' }}, done);
 };
 
 var Login = function(username, password, done) {
@@ -51,7 +48,9 @@ var Login = function(username, password, done) {
         if (err) return console.log(err);
         else if(doc == null) return done(false);
         else {
-            return done(doc._id);
+            return done({userId: doc._id,
+                        name: doc.name,
+                        avatar: doc.avatar});
         }
     });
 };
