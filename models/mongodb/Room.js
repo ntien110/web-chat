@@ -41,12 +41,10 @@ const findByUserId = function(userId, callback){
     Room.find({members: {$elemMatch: {userId: id}}}).exec(callback)
 }
 
-// create(["5df8a8176377113751905e66","5dc994237ca7c207c3b36ba1"],(err, data)=>{console.log(data)}, "test room")
+create(["5df8a8176377113751905e66","5dc994237ca7c207c3b36ba1"],(err, data)=>{console.log(data)}, "test room")
 // findByUserId("313131313131313131313132",(err, data)=>{
 //     console.log(err, data)
 // })
 module.exports = {
-    findByUserId,
-    create,
     Room
 };

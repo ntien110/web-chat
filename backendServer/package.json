@@ -9,7 +9,6 @@
     "concurrently": "*"
   },
   "dependencies": {
-<<<<<<< HEAD:package.json
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
@@ -28,12 +27,4 @@
     "url": "https://github.com/ntien110/web-chat/issues"
   },
   "homepage": "https://github.com/ntien110/web-chat#readme"
-=======
-    "mongoose": "*",
-    "uniqid": "*",
-    "express": "*",
-    "body-parser": "*",
-    "cors": "*"
-  }
->>>>>>> 9a65ab98557a549253e0c069a773736690ed1d9a:backendServer/package.json
 }
