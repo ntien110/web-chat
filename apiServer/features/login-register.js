@@ -1,7 +1,7 @@
 const express=require("express"),
      router = express.Router()
 const session = require('express-session');
-
+const bcrypt = require('bcryptjs');
 const user = require('../../models/mongodb/User');
 
 router.use(session({
@@ -14,16 +14,16 @@ router.route('/')
     .post(function (req, res) {
         var username = req.body.username;
         var password = req.body.password;
-        user.Login(username, password, function(result){
-            if(result == false || result == null){
+        user.Login(username, password, function(err, result){
+            if(err || result == null){
                 res.json({
-                    'isValid' : false 
-                })
+                    'status' : false
+                })   
             }else{
                 var userID = result;
                 req.session.userID = userID; 
                 res.json({
-                    'isValid' : true,
+                    'status' : true,
                     userID 
                 })
             }
@@ -35,36 +35,29 @@ router.route('/resgister')
           var username = req.body.username;
           var password = req.body.password;
           var name = req.body.name;
+          var avatar = ' ';
           console.log(username);
           console.log(password);
-          var userRegister = new user({
-              username : username,
-              name: name,
-              password: password,
-              avatar: " ",
-              friend_list : " " ,
-              wait_list: ""
-          });
 
-    user.CheckUsername(username, function(data){
+    user.CheckUsername(username, function(data, err){
               if(data == false){
-                  user.CreateUser(userRegister, function(result){
-                      if(result == null){
+                  user.CreateUser(username, name, password, avatar, function(err,result){
+                      if(result == null || err){
                           res.json({
-                            'success':  false
+                            'status':  false
                           })
                         }
                         else{
                             res.json({
-                                'success': true,
-                                result //chỉ có id
+                                'status': true,
+                                'userId': result //chỉ có id
                             })
                         }  
                    })
                 }
                 else{
                     res.json({
-                        'success' :  false
+                        'status' : false
                     })
                 }
           })      
@@ -72,29 +65,53 @@ router.route('/resgister')
 
     router.get('/resgister/:username', (req, res) =>{
         var username = req.params.username;
-        user.CheckUsername(username, function(dataResult){
+        user.CheckUsername(username, function(err, dataResult){
             if(dataResult == false){
                 res.json({
-                    'isValid' : false
+                    'status' : false
                 })
             }else{
                 res.json({
-                    'isValid' : true
+                    'status' : true
                 })
             }
         })
     })
+//err truoc
+    router.route('/getUser')
+          .post((req, res) =>{
+              var userId = req.body.userId;
+              user.GetInfoUser(userId, function(err, data){
+                  if(err || data == null){
+                      res.json({
+                          'status' : false
+                      })
+                  }else{
+                      res.json({
+                          'status': true,
+                          name : data.name,
+                          avatar: data.avatar
+                      })
+                  }
+              }) 
 
-    router.post('/getUser', (req, res) => {
+          })    
+     
+    router.post('/checkUser', (req, res) => {
         if(req.session.userID){
-            return res.status(200).json({status: 'success'})
+            return res.status(200).json({status: true})
         }
-        return res.status(200).json({status: 'error'})
+        return res.status(200).json({status: false})
     })
 
+    router.route('/editUser')
+          .post((req, res) =>{
+              var userId = req.body.userId;
+
+          })
     router.post('/logout', (req, res) => {
         req.session.destroy(function(err) {
-            return res.status(200).json({status: 'success'})
+            return res.status(200).json({status: true})
         })
     })
 
