@@ -56,16 +56,16 @@ var insert = function (Type, body, Group, done) {
         group: Group,
     })
     picture.save(function (err, doc) {
-        if(err) return done(err);
-        else return done(doc._id);
+        if(err) console.log(err);
+        return done(err, doc._id);
 
     })
 }
 // Trả về đối tượng picture có các thuộc tính _id, Type, body, group 
 var GetPictureByID = function(pictureID, done){
     Picture.findById(pictureID, function (err, doc) {
-        if(err) return done(err);
-        else return done(doc);
+        if(err) console.log(err);
+        return done(err, doc);
 
     })
 }
@@ -73,8 +73,8 @@ var GetPictureByID = function(pictureID, done){
 // Trả về mảng picture có các thuộc tính _id, Type, body, group
 var GetStickerByName = function(stickerName, done){
     Picture.find({'Type': 'Sticker', 'group': stickerName}, function (err, doc) {
-        if(err) return done(err);
-        else return done(doc);
+        if(err) console.log(err);
+        return done(err, doc);
 
     })
 }  
@@ -83,7 +83,7 @@ var GetStickerByName = function(stickerName, done){
 var GetAllSticker = function(done){
     Picture.find({'Type': 'Sticker'}, function (err, doc) {
         if(err) return done(err);
-        else return done(doc);
+        return done(err, doc);
 
     })
 }
@@ -107,9 +107,9 @@ module.exports = {
 //     console.log(data);
 // })
 
-GetPictureByID('5df5acb2d1bd6f03c9c0d7cb', function (data) {
-    console.log(data)
-})
+// GetPictureByID('5df5acb2d1bd6f03c9c0d7cb', function (err, data) {
+//     console.log(data)
+// })
 
 // GetPictureByID('5df5acb2d1bd6f03c9c0d7cb', function (data) {
 //                                  console.log(data)

@@ -27,11 +27,11 @@ var User = mongoose.model('User', UserSchema);
 
 
 // Trả về _id của user vàu tạo
-var CreateUser = function (username, name, password, avatar, done) {
+const CreateUser = function (username, name, password, avatar, done) {
     // Thêm thành công trả về _id user, ngược lại trả về error
     User.findOne({'username': username}, function (err, doc) {
-        if (err) return console.log(err);
-        else if (doc != null) return done(err);
+        if (err) console.log(err);
+        if (doc != null) return done(err, 'username da ton tai');
     });
     
     let user = new User({
@@ -42,12 +42,24 @@ var CreateUser = function (username, name, password, avatar, done) {
     })
 
     user.save((err, data) => {
-        if (err) done(err);
-        else return (done(data._id));
+        if (err) console.log(err);
+        return (done(err, data._id));
     });
 }
 
 
+const UpdateUser = function (userID, username, name, password, avatar, done) {
+    User.updateOne({_id: userID}, {
+
+        'username': username,
+        'name': name,
+        'password': password,
+        'avatar': avatar
+    }, function () {
+        console.log(('Update complete'));
+        return done(null, true);
+    })
+}
 
 // var FindUserByUsername = function (username, done) {
 //     User.findOne({username: username}, function (err, doc) {
@@ -67,20 +79,19 @@ var CreateUser = function (username, name, password, avatar, done) {
 var Login = function (username, password, done) {
     // login thành công trả về _id của user, ngược lại trả về false.
     User.findOne({username: username, password: password}, function (err, doc) {
-        if (err) return console.log(err);
-        else if (doc == null) return done(false);
-        else {
-            return done(doc._id);
-        }
+        if (err) console.log(err);
+        if (doc == null) return done(err, false);
+        else return done(err, doc._id);
+
     });
 };
 
 var CheckUsername = function (username, done) {
     //trả về false là username chưa bị sử dụng, true là đã bị sử dụng.
     User.findOne({username: username}, function (err, doc) {
-        if (err) return console.log(err);
-        else if (doc == null) return done(false);
-        return done(true);
+        if (err) console.log(err);
+        if (doc == null) return done(err, false);
+        else return done(err, true);
     });
 };
 
@@ -88,8 +99,8 @@ var CheckUsername = function (username, done) {
 // Trả về name, avatar, wait_list, friend_list, room_list của user
 var GetInfoUser = function(_idUser, done){
     User.findById(_idUser, 'name avatar friend_list wait_list room_list', function (err, doc) {
-        if(err) return done(err);
-        else return done(doc);
+        if(err) console.log(err);
+        return done(err, doc);
 
     })
 }
@@ -101,22 +112,27 @@ module.exports = {
     CreateUser,
     Login,
     CheckUsername,
-    GetInfoUser
+    GetInfoUser,
+    UpdateUser
 };
 
 //  --------------****************TEST****************---------------
 
-// Login('ti', '12345', function (data) {
-//     console.log(data);
-//
-// })
-
-GetInfoUser('5dc994237ca7c207c3b36ba1', function (data) {
+Login('tao', '12345', function (err, data) {
     console.log(data);
 
 })
+
+// GetInfoUser('5dc994237ca7c207c3b36ba1', function (data) {
+//     console.log(data);
+//
+// })
 
 //  User.findOne({username: 'ti'}).exec((err, user)=>{
 //      console.log(user.name);
 //
 // }  );
+
+// CreateUser('tao', 'tao nguyen', '123', '', function (err, data) {
+//      console.log(data);
+// })

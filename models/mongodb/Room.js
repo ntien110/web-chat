@@ -28,28 +28,28 @@ var CreateRoom = function (member1, member2, done) {
         isOnline: true
     });
     room.save(function (err, doc) {
-        if (err) return done(err);
-        return done(doc._id);
+        if (err) console.log(err);
+        return done(err, doc._id);
     });
 };
 
 // Trả về mảng gồm các _id của các thành viên trong room
 var GetMembersARoom = function (roomID, done) {
     Room.findById(roomID, 'members', function (err, doc) {
-        if(err) return done(err);
-        else return done(doc.members);
+        if(err) console.log(err);
+        return done(err, doc.members);
 
     })
 };
 
 // Trả về Room gồm các thuộc tính
-// var GetRoomByID =  function (roomID, done) {
-//     Room.findById(roomID, 'members isOnline messages', function (err, doc) {
-//         if(err) return done(err);
-//         else return done(doc);
-//
-//     })
-// };
+var GetRoomByID =  function (roomID, done) {
+    Room.findById(roomID, 'members isOnline messages', function (err, doc) {
+        if(err) console.log(err);
+        return done(err, doc);
+
+    })
+};
 
 // Trả về true nế thêm tin nhắn thành công
 var CreateMessage =  function (roomID, From, Type, Body, time, done) {
@@ -59,11 +59,15 @@ var CreateMessage =  function (roomID, From, Type, Body, time, done) {
         Body: Body,
         time: time
     }
-    GetRoomByID(roomID, function (data) {
+    GetRoomByID(roomID, function (err1, data) {
+        if(err1){
+            console.log(err1);
+            return done(err1, null);
+        }
         data.messages.push(message);
         data.save(function (err, doc) {
-            if(err) return done(err);
-            else return done(true);
+            if(err) console.log(err);
+            return done(err, doc.messages[doc.messages.length -1]);
 
         })
 
@@ -72,8 +76,8 @@ var CreateMessage =  function (roomID, From, Type, Body, time, done) {
  // Chi viec post message, ham se tu kiem tra su ton tai cua room, neu chua co se them
 var GetLastTimeARoom = function(roomID, done){
     Room.findById(roomID, 'message', function (err, doc) {
-        if(err) return done(err);
-        else return done(doc.messages[doc.messages.length-1].time);
+        if(err) console.log(err);
+        return done(err, doc.messages[doc.messages.length-1].time);
 
     })
 }
@@ -81,26 +85,27 @@ var GetLastTimeARoom = function(roomID, done){
 // Trả về mảng gồm 'number' tin nhắn trong room. ví dụ cần lấy 5 tin nhắn thì number = 5.
 var GetMessengerInRoom = function(roomID, number, done){
     Room.findById(roomID, 'messages', function (err, doc) {
-        if(err) return done(err);
-        else return done(doc.messages);
+        if(err) console.log(err);
+        return done(err, doc.messages);
 
     }).limit(number)
 }
 
-var SetRoomStatus = function(roomID, status){
+var SetRoomStatus = function(roomID, status, done){
     Room.updateOne({_id: roomID}, {
          
             'isOnline': status
     }, function () {
          console.log(('Update complete'));
+         return done(null, true);
     })
 }
 
 // Trả về trạng thái online của room, true or false 
 var GetRoomStatus = function(roomID, done){
     Room.findById(roomID, 'isOnline', function (err, doc) {
-        if(err) return doc(err);
-        else return done(doc.isOnline);
+        if(err) console.log(err);
+        return done(err, doc.isOnline);
 
     })
 }
@@ -129,10 +134,10 @@ module.exports = {
 //
 // })
 
-// GetRoomByID('5df5a1d91ba5cd031bf2831c', function (data) {
-//     console.log(data);
-//
-// })
+GetRoomByID('5df5a1d91ba5cd031bf2831c', function (data) {
+    console.log(data);
+
+})
 
 // CreateMessage('5df5a1d91ba5cd031bf2831c', '5dc994237ca7c207c3b36ba1', 'Sticker', 'Lo CC','', function (data) {
 //               console.log(data);
