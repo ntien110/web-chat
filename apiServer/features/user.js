@@ -107,6 +107,19 @@ router.route('/resgister')
     router.route('/editUser')
           .post((req, res) =>{
               var userId = req.body.userId;
+              var password = req.body.password;
+              var name = req.body.name;
+              var avatar = req.body.avatar;
+              user.UpdateUser(userId, name, password, avatar, function(result1, result2){
+                  if(result1 == null){
+                      res.json({
+                          'status': false,
+                      })
+                  }
+                  res.json({
+                      'status': result2
+                  })
+              })
 
           })
     router.post('/logout', (req, res) => {
