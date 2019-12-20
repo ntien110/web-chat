@@ -11,15 +11,17 @@ router.route('/rooms')
             if (err) {
                 console.log(err)
                 res.json({
-                    "status": "failed"
+                    "status": false
                 })
                 return
             } else {
                 console.log(data)
                 res.json({
-                    "status": "success",
+                    "status": true,
                     "rooms": data.map((room) => {return{
-                        "members": room.members.map((member) => (member.userId)),
+                        "roomId": room._id,
+                        "name": room.name, 
+                        //"members": room.members.map((member) => (member.userId)),
                         "lastMessage": room.messages.length>0?room.messages.reduce((nearestMessage, cur)=>cur.time>nearestMessage.time?cur:nearestMessage):null
                     }})
                 })
@@ -28,7 +30,22 @@ router.route('/rooms')
 
     })
 
-      
+router.route('/getMessage')
+    .post((req, res) => {
+        var roomId = req.body.roomId;
+        room.GetMessengerInRoom(roomId, 10, function(err, message){
+            if(err){
+                res.json({
+                    'status': false
+                })
+            }else{
+                res.json({
+                    'status': true,
+                    message
+                })
+            }
+        }) 
+    })      
 
 module.exports = {
     router
