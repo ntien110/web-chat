@@ -11,9 +11,10 @@ app.use((req,res,next)=>{
     next()
 })
 
-const login=require("./features/login").router
-app.use(login)
-
+const login = require("./user");
+app.use(login);
+const rooms = require("./rooms");
+app.use(rooms);
 app.listen(process.env.PORT || 3000, function () {
     console.log('Node.js listening ...');
 });

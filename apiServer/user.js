@@ -1,7 +1,7 @@
 const express = require("express"),
     router = express.Router()
 const session = require('express-session');
-const bcrypt = require('bcryptjs');
+
 const user = require('../../models/mongodb/User');
 
 router.use(session({
@@ -102,6 +102,7 @@ router.route('/searchFriend')
     .post((req, res) => {
         var name = req.body.name;
         var thisUserId = req.body.userId;
+       
         user.FindUserByName(name, function (err1, data) {
             if (err1) {
                 res.json({
@@ -133,13 +134,48 @@ router.route('/searchFriend')
         })
     })
 
-router.post('/checkUser', (req, res) => {
-    if (req.session.userID) {
-        return res.status(200).json({ status: true })
-    }
-    return res.status(200).json({ status: false })
-})
-
+    router.route('/sendRequestAddFriend')
+    .post((req, res) => {
+        var thisUserId = req.body.thisUserId;
+        var userId = req.body.userId;
+        Room.addWaitList(thisUserId, userId, function(err, result){
+          if(result == true){
+              res.json({
+                  'status': true
+              })
+          }else{
+              res.json({
+                  'status': false
+              })
+          }
+        });
+    })
+router.route('/acceptRequestAddFriend')
+    .post((req, res) => {
+      var thisUserId = req.body.thisUserId;
+      var userId = req.body.userId;
+      User.addFriendList(thisUserId, userId, function(err, result){
+          if(result == true){
+              var members = [thisUserId, userId];
+              Room.create(members, function(err, data){
+                  if(err){
+                      res.json({
+                          'status': false
+                      })
+                  }else{
+                      res.json({
+                          'status': true
+                      })
+                  }
+              })
+              
+          }else{
+              res.json({
+                  'status': false
+              })
+          }
+      });
+    }) 
 router.route('/editUser')
     .post((req, res) => {
         var userId = req.body.userId;
@@ -158,6 +194,14 @@ router.route('/editUser')
         })
 
     })
+router.post('/checkUser', (req, res) => {
+    if (req.session.userID) {
+        return res.status(200).json({ status: true })
+    }
+    return res.status(200).json({ status: false })
+})
+
+
 router.post('/logout', (req, res) => {
     req.session.destroy(function (err) {
         return res.status(200).json({ status: true })
@@ -166,4 +210,4 @@ router.post('/logout', (req, res) => {
 
 
 
-module.exports = router
+module.exports = router;
