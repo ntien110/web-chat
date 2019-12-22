@@ -105,6 +105,51 @@ var GetInfoUser = function(_idUser, done){
     })
 }
 
+var RemoveUserInWaitList = function (thisUserId, userId, done) {
+    User.update( { _id: thisUserId }, { $pull: { wait_list: { $gte: userId } } }, function (err, doc) {
+        if(err) {console.log(err); return done(err, false)}
+        else {
+            return done(err, true);
+        }
+
+    } )
+}
+
+var RemoveUserInFriendList = function (thisUserId, userId, done) {
+    User.update( { _id: thisUserId }, { $pull: { friend_list: { $gte: userId } } }, function (err, doc) {
+        if(err) {console.log(err); return done(err, false)}
+        else {
+            return done(err, true);
+        }
+
+    } )
+}
+
+var addWaitList = function(thisUserId, userId, done){
+    User.findById(thisUserId, 'name avatar friend_list wait_list room_list', function(err, doc){
+        if(err) return done(err, false);
+        else{
+            doc.wait_list.push(userId);
+            doc.save(function(err, data){
+                return done(err, true);
+            })
+        }
+    })
+}
+//thay doi
+var addFriendList = function (thisUserId, userId, done){
+    User.findById(thisUserId, 'name avatar friend_list wait_list room_list', function(err, doc){
+        if(err) return done(err, false);
+        else {
+            doc.friend_list.push(userId);
+            doc.save(function(err, data){
+                return done(err, true);
+            })
+        }
+    })
+}
+
+
 
 module.exports = {
    // FindUserByName,
@@ -113,15 +158,19 @@ module.exports = {
     Login,
     CheckUsername,
     GetInfoUser,
-    UpdateUser
+    UpdateUser,
+    addFriendList,
+    addWaitList,
+    RemoveUserInWaitList,
+    RemoveUserInFriendList
 };
 
 //  --------------****************TEST****************---------------
 
-Login('tao', '12345', function (err, data) {
-    console.log(data);
-
-})
+// Login('tao', '12345', function (err, data) {
+//     console.log(data);
+//
+// })
 
 // GetInfoUser('5dc994237ca7c207c3b36ba1', function (data) {
 //     console.log(data);
@@ -136,3 +185,6 @@ Login('tao', '12345', function (err, data) {
 // CreateUser('tao', 'tao nguyen', '123', '', function (err, data) {
 //      console.log(data);
 // })
+RemoveUserInWaitList('5dfdedfe113583131c0c238e', '5dfdeea6113583131c0c238f', function (err, data) {
+    console.log(data);
+})

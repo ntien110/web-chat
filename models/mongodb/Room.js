@@ -85,17 +85,10 @@ var GetLastTimeARoom = function(roomID, done){
 }
 
 // Trả về mảng gồm 'number' tin nhắn trong room. ví dụ cần lấy 5 tin nhắn thì number = 5.
-let amountMessInRoom = 0;
-var GetMessengerInRoom = function(roomID, number, done){
+
+var GetMessengerInRoom = function(roomID, done){
     Room.findById(roomID, 'messages', function (err, doc) {
         if(err) console.log(err);
-        amountMessInRoom = doc.messages.length;
-        console.log((amountMessInRoom));
-        if(amountMessInRoom > number){
-             for(let i = 0; i < amountMessInRoom - number; i++){
-                    doc.messages.shift();
-             }
-        }
         return done(err, doc.messages);
 
     })
@@ -104,7 +97,6 @@ var GetMessengerInRoom = function(roomID, number, done){
 
 var SetRoomStatus = function(roomID, status, done){
     Room.updateOne({_id: roomID}, {
-         
             'isOnline': status
     }, function () {
          console.log(('Update complete'));
@@ -143,9 +135,9 @@ module.exports = {
 //------------------------------*************TEST************--------------------------------
 
 
-// GetMessengerInRoom('5dfa00d14a06793b0a76a342', 1, function (err, data) {
-//     console.log(data);
-// })
+GetMessengerInRoom('5dfa00d14a06793b0a76a342', function (err, data) {
+    console.log(data);
+})
 
 // CreateRoom('5dc994237ca7c207c3b36ba1', '5dc994237ca7c207c3b36ba1', function (data) {
 //     console.log(data);
