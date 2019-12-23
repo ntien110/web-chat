@@ -2,7 +2,9 @@ const express = require("express"),
     router = express.Router()
 const session = require('express-session');
 
-const user = require('../../models/mongodb/User');
+const user = require('../models/mongodb/User');
+const Room = require('../models/mongodb/Room');
+const Picture = require('../models/mongodb/Picture');
 
 router.use(session({
     resave: true,
