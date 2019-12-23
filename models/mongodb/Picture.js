@@ -64,7 +64,7 @@ var insert = function (Type, body, Group, done) {
 // Trả về đối tượng picture có các thuộc tính _id, Type, body, group 
 var GetPictureByID = function(pictureID, done){
     Picture.findById(pictureID, function (err, doc) {
-        if(err) console.log(err);
+        //if(err) console.log(err);
         return done(err, doc);
 
     })
@@ -73,20 +73,23 @@ var GetPictureByID = function(pictureID, done){
 // Trả về mảng picture có các thuộc tính _id, Type, body, group
 var GetStickerByName = function(stickerName, done){
     Picture.find({'Type': 'Sticker', 'group': stickerName}, function (err, doc) {
-        if(err) console.log(err);
-        return done(err, doc);
-
-    })
-}  
-
-// Trả về mảng gồm tất cả các sticker 
-var GetAllSticker = function(done){
-    Picture.find({'Type': 'Sticker'}, function (err, doc) {
-        if(err) return done(err);
+       // if(err) console.log(err);
         return done(err, doc);
 
     })
 }
+
+
+
+// Trả về mảng gồm tất cả các sticker 
+var GetAllSticker = function(done){
+    Picture.find({'Type': 'Sticker'}, function (err, doc) {
+        //if(err) return done(err);
+        return done(err, doc);
+
+    })
+}
+
 
 module.exports = {
     insert,
