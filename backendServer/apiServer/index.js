@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors=require("cors");
 const webSecketServer=require("../websocketServer/server")
-
+const session = require('express-session');
 const app = express();
 server=require("http").createServer(app)
 const io=require('socket.io')(server);
@@ -25,11 +25,16 @@ app.use((req,res,next)=>{
     //console.log(req)
     next()
 })
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: 'somesecret',
+    cookie: { maxAge: 60000 }
+}));
 
 webSecketServer(io)
 
     
-
 const login=require("./user")
 app.use(login)
 
