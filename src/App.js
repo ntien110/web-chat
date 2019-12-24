@@ -8,23 +8,25 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showContent: false          
+            userId: ''
         }
     }
     onSuccessLogin = (userId) => {
-        this.setState({ userId, showContent: true }, () => {
-            console.log('State is now', this.state)
-        })
+        localStorage.setItem("user", userId);
+        this.setState({
+            userId
+        });
     }
     // when error occurred in some lower components
     componentDidCatch() {
         alert('Some Error occurred...!!')
     }
     render() {
-        let { showContent, userId} = this.state;
+        let {userId} = this.state;
+        userId = localStorage.getItem("user") != null ? localStorage.getItem("user"): userId;
         return (
             <div className="App">
-                {(showContent === false) ? <Join onSuccessLogin={this.onSuccessLogin} /> : <Content userId={userId}/>}
+                {(userId === '') ? <Join onSuccessLogin={this.onSuccessLogin} /> : <Content userId={userId}/>}
             </div>
         );
     }

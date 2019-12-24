@@ -329,7 +329,7 @@ body {
 }
 
 .chat_list:hover {
-    background: #cccccc;
+    background: #ebebeb;
 }
 
 .inbox_chat {
@@ -464,7 +464,7 @@ body {
 
 .type_msg {
     /*border-top: 1px solid #c4c4c4;*/
-    padding-top: 15px;
+    padding-top: 0px;
     padding-left: 10px;
 }
 

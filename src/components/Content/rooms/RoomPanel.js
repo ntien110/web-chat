@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { IoMdSearch } from 'react-icons/io';
 //Component
 import RoomInfo from './RoomInfo';
 // Constants
-import Constants from './../../Constants'
+import Constants from './../../Constants';
+//css
+import './RoomPanel.css';
 class RoomPanel extends Component {
     constructor(props) {
         super(props);
@@ -38,8 +41,6 @@ class RoomPanel extends Component {
 
         // });
         this.setState({ rooms: newRooms });
-        console.log(this.state.rooms);
-
     }
     componentDidMount() {
         this.loadrooms();
@@ -69,7 +70,6 @@ class RoomPanel extends Component {
 
     setSelectedRoomId = (id) => {
         // pass the selected room id augmented with logged in userid to the parent 
-        console.log(id, " choose id");
         this.props.setSelectedRoomId(id);
         // set active room id for highlighting purpose
         this.setState({ activeRoomId: id });
@@ -110,14 +110,24 @@ class RoomPanel extends Component {
         let { activeRoomId, rooms } = this.state;
         return (
             <div className="inbox_chat">
+                <div class="search-box-wrapper">
+                    <input type="text" placeholder="Search..." class="search-box-input" />
+                    <button class="search-box-button"><IoMdSearch /></button>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-4 btn-left active-btn-left">Message</div>
+                    <div class="col-sm-4 btn-left">Friend</div>
+                    <div class="col-sm-4 btn-left">Add friend</div>
+                </div>
+                <hr />
                 {
                     rooms.map((room) => {
                         return (
-                            <div className='chat_list' key={room.roomId} onClick={() => this.setSelectedRoomId(room.roomId)}>
+                            <div className={activeRoomId === room.roomId ? 'chat_list active_chat' : 'chat_list'} key={room.roomId} onClick={() => this.setSelectedRoomId(room.roomId)}>
                                 <RoomInfo
                                     room={room}
                                     userId={userId}
-                                    activeRoomId={activeRoomId}
                                     setSelectedRoomId={setSelectedRoomId}
 
                                 />

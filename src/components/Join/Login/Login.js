@@ -37,9 +37,7 @@ class Login extends Component {
             var data = res.data;
             if (data.status) {
                 console.log("login successful");
-
                 this.props.onSuccessLogin(data.userId);
-                console.log(data.userId);
             } else {
                 // reload the page
                 console.log("login failed");

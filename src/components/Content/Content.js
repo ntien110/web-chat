@@ -14,24 +14,25 @@ import Constants from './../Constants';
 class Content extends Component {
     constructor(props) {
         super(props);
-        this.socket = io('http://192.168.1.58:3002');
+        // instantiate the Constants
+        this.allConstants = new Constants();
+        this.socket = io(this.allConstants.webSocketServer);
         this.state = {
             //onlineRooms có dạng ["room": ["userId-1","userId-2",....]]
             onlineRooms: {},
             socket: '',
             onNewMessageArrival: '',
-            selectedRoomId:'',
+            selectedRoomId: '',
             showMessagePanel: false
         };
-        // instantiate the Constants
-        this.allConstants = new Constants();
+
     }
     componentDidMount() {
         this.socket.on("welcome", (msg) => {
             this.socket.emit("userId", this.props.userId);
         });
         this.socket.on("message", (data) => {
-            console.log('data value ', data);
+            //console.log('data value ', data);
             // console.log(data)
             // send the newly incoming message to the parent component 
             this.setState({
@@ -73,14 +74,17 @@ class Content extends Component {
     }
     setSelectedRoomId = (id) => {
         console.log('id here in content: ', id);
-        this.setState({
-            selectedRoomId: id,
-            showMessagePanel: true
-        });
+        if (id !== this.state.selectedRoomId)
+        {
+            this.setState({
+                selectedRoomId: id,
+                showMessagePanel: true
+            });
+        }
     }
     render() {
         let { userId } = this.props;
-        let { selectedRoomId, onNewMessageArrival, onlineRooms, showMessagePanel} = this.state;
+        let { selectedRoomId, onNewMessageArrival, onlineRooms, showMessagePanel } = this.state;
         let socket = this.socket;
         return (
             <div>
@@ -106,10 +110,10 @@ class Content extends Component {
                                         onNewMessageArrival={onNewMessageArrival}
                                     />
                                     :
-                                    <Welcome/>
-                                }   
+                                    <Welcome />
+                                }
                             </div>
-                            <ContentRight userId={userId}/>
+                            <ContentRight userId={userId} />
                         </div>
                     </div>
                 </div>

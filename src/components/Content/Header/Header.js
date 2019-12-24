@@ -27,6 +27,10 @@ class Header extends Component {
         // instantiate the Constants
         this.allConstants = new Constants();
     }
+    Logout = () => {
+        localStorage.removeItem("user");
+        window.location.reload();
+    }
     onToggleLogout = () => {
         this.setState({
             showInfo: !this.state.showInfo
@@ -150,7 +154,7 @@ class Header extends Component {
                                 <div className="edituser">
                                     <div className="box-edituser" onClick={this.OpenUserInfo}>Update Information</div>
                                     <hr />
-                                    <div className="box-edituser" onClick={() => { window.location.reload() }} >Logout</div>
+                                    <div className="box-edituser" onClick={this.Logout} >Logout</div>
                                 </div>
                                 :
                                 ''
