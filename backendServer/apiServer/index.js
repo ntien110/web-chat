@@ -35,11 +35,14 @@ app.use(session({
 webSecketServer(io)
 
     
-const login=require("./user")
-app.use(login)
-
-const rooms=require("./rooms")
-app.use(rooms)
+const user = require("./user/users");
+app.use(user);
+const friend = require("./user/friends");
+app.use(friend);
+const rooms=require("./room/rooms");
+app.use(rooms);
+const picture = require("./picture/sticker");
+app.use(picture);
 
  app.listen(process.env.PORT || 3000, function () {
      console.log('Node.js listening ...');

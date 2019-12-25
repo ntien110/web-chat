@@ -1,7 +1,7 @@
 const express = require('express'),
 router = express.Router();
 
-const Room = require('../../backendServer/models/mongodb/Room');
+const Room = require('../../models/mongodb/Room');
 
 router.route('/rooms')
     .post((req, res) => {
@@ -29,12 +29,12 @@ router.route('/rooms')
         })
     })
 
-    router.route('/getMessage')   
+router.route('/getMessage')   
     .post((req, res) => {
-        // var roomId = req.body.roomId;
+        var roomId = req.body.roomId;
         var time = req.body.time;
         var limit = req.body.limit;
-        var roomId = req.body.roomId;
+        // var roomId = '5dfa00d14a06793b0a76a342';
         Room.GetMessengerInRoom(roomId, function(err, messages){
             if(err || messages == null){
                 res.json({
@@ -78,6 +78,25 @@ router.route('/rooms')
             }
         })
     })  
+    // roomID, From, Type, Body, time, done
+    // router.route('/addMessage')
+    //       .post((req, res) =>{
+    //         var Body = 'this is the first message';
+    //         var time = new Date();
+    //         var From = '5dfa00d14a06793b0a76a344';
+    //         var Type = 'text';
+    //         var roomId =  '5dfa00d14a06793b0a76a342';
+    //         Room.CreateMessage(roomId, From, Type, Body, time, function(err, data){
+    //             if(err|| null){
+    //                 res.json({
+    //                     'status': false
+    //                 })
+    //             }else{
+    //                 res.json({
+    //                     'status': true
+    //                 })
+    //             }
+    //         })
+    //       })
 
 module.exports = router;
-    
