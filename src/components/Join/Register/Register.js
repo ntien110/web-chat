@@ -55,6 +55,7 @@ class Register extends Component {
             var data = res.data;
             if (data.status) {
                 alert('register success');
+                this.props.onSuccessLogin(data.userId);
                 this.setState({
                     name:'',
                     username: '',
@@ -66,22 +67,6 @@ class Register extends Component {
             }
         });
     }
-    // getBase64 = (e) => {
-    //     this.setState({
-    //         displayImg: URL.createObjectURL(e.target.files[0])
-    //     });
-    //     var file = e.target.files[0];
-    //     let reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onload = () => {
-    //         this.setState({
-    //             avatar: reader.result
-    //         })
-    //     };
-    //     reader.onerror = function (error) {
-    //         console.log('Error: ', error);
-    //     }
-    // }
     render() {
         var { name, username, password, userIsExist } = this.state;
         return (

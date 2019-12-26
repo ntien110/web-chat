@@ -52,3 +52,10 @@
 .message-box{
     overflow-y: auto;
 }
+/* Dark Night */
+.btn-leftDark{
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+}

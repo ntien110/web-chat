@@ -26,7 +26,7 @@ class RoomPanel extends Component {
             showAllFriend: false,
             friendSearch: [],
             notFriendSearch: [],
-            from: ''
+            from: '',
         }
         // instantiate the Constants
         this.allConstants = new Constants();
@@ -74,8 +74,14 @@ class RoomPanel extends Component {
         }).then(res => {
             var data = res.data;
             if (data.status) {
-                console.log("getRooms", data.rooms);
-                this.setState({ rooms: data.rooms });
+                let rooms = data.rooms;
+                //console.log("getRooms", data.rooms);
+                this.setState({ rooms: rooms });
+                let onlineRooms = [];
+                for (let i in rooms){
+                    if (rooms[i].online) onlineRooms.push(rooms[i]);
+                }
+                this.props.getOnlineRooms(onlineRooms);
             }
             else {
                 console.log("getRoom is failed");
@@ -90,7 +96,7 @@ class RoomPanel extends Component {
         this.props.setSelectedRoomId(id);
         // set active room id for highlighting purpose
         this.setState({ activeRoomId: id });
-        // this.changeReadStatus(id)
+        this.changeReadStatus(id);
     }
     onChange = (event) => {
         var target = event.target;
@@ -180,38 +186,35 @@ class RoomPanel extends Component {
             showListFriend: false
         });
     }
+    onAcceptedFriendRequest = (from, to) => {
+        let list = this.state.listWait;
+        let index = list.findIndex((friend) => friend.userId === to);
+        if (index >= 0) list.splice(index, 1); 
+        this.setState({
+            listWait: list
+        })
+    }
     // function to change the room status from read / unread
     // changeReadStatus(id) {
-    //     let allRooms = [...this.state.rooms];
-    //     console.log('change status reached');
-
-    //     allRooms.forEach((room, index, roomArray) => {
-    //         if (room.roomId === id && room.read === false) {
-    //             roomArray[index].read = true
-    //             this.saveReadStatusToDb(room, true)
-    //         }
-    //     })
-
-    //     console.log('All rooms are now', allRooms)
-    //     this.setState({ rooms: allRooms })
-    // }
-    // saveReadStatusToDb(room, status) {
+    //     let allConstants = this.allConstants;
     //     axios({
-    //         method: 'PUT',
-    //         url: 'http://localhost:9000/updateroomreadstatus',
+    //         method: 'POST',
+    //         url: allConstants.updateReadStatus,
     //         data: {
     //             userId: this.props.userInfo.userId,
-    //             roomName: room.roomName,
-    //             read: status
+    //             roomId: id,
+    //             read: true,
+    //             time: new Date()
     //         }
     //     }).then((response) => {
-    //             console.log('room status saved');
+    //         console.log('update status success');
     //     }).catch((err) => {
-    //          console.log('unable to save room status', err);
+    //         console.log('update status failed', err);
     //     })
     // }
     render() {
-        let { userId, setSelectedRoomId, socket } = this.props;
+        let { userId, setSelectedRoomId, socket, onlineRooms } = this.props;
+        let btnLeft = 'btn-left';  
         let { from, activeRoomId, rooms, showListFriend, showMessage, listFriend, listWait, showAllFriend, notFriendSearch, friendSearch, search } = this.state;
         return (
             <div className="inbox_chat">
@@ -226,7 +229,7 @@ class RoomPanel extends Component {
                         :
                         <div>
                             <div className="row">
-                                <div className={showMessage ? "col-sm-4 btn-left active-btn-left" : "col-sm-4 btn-left"} onClick={this.onShowMessage}>Message</div>
+                                <div className={showMessage ? `col-sm-4 ${btnLeft} active-btn-left` : `col-sm-4 ${btnLeft}`} onClick={this.onShowMessage}>Message</div>
                                 <div className={showListFriend ? "col-sm-4 btn-left active-btn-left" : "col-sm-4 btn-left"} onClick={this.onShowListFriend}>Friend</div>
                                 <div className={!showMessage && !showListFriend ? "col-sm-4 btn-left active-btn-left" : "col-sm-4 btn-left"} onClick={this.onShowAddfriend}>Add friend</div>
                             </div>
@@ -242,7 +245,7 @@ class RoomPanel extends Component {
                                                     room={room}
                                                     userId={userId}
                                                     setSelectedRoomId={setSelectedRoomId}
-
+                                                    onlineRooms={onlineRooms}
                                                 />
                                             </div>
                                         )
@@ -251,7 +254,7 @@ class RoomPanel extends Component {
                                     showListFriend ?
                                         <ListFriend listFriend={listFriend} />
                                         :
-                                        <ListWait listWait={listWait} userId={userId} />
+                                        <ListWait onAcceptedFriendRequest={this.onAcceptedFriendRequest} socket={socket} listWait={listWait} userId={userId} />
                             }
                             </div>
                         </div>

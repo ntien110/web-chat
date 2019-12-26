@@ -28,7 +28,7 @@ class Join extends Component {
                             <div className="logreg-content">
                                 <Login onSuccessLogin={this.props.onSuccessLogin}/>
                                 <hr />
-                                <Register />
+                                <Register onSuccessLogin={this.props.onSuccessLogin}/>
                             </div>
                         </div>
                     </div>

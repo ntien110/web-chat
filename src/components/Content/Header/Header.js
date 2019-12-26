@@ -52,9 +52,31 @@ class Header extends Component {
         var target = event.target;
         var name = target.name;
         var value = target.type === 'checkbox' ? target.checked : target.value;
+        if (target.type ==='file'){
+            this.getBase64(event);
+        }
+        else {
+            this.setState({
+                [name]: value
+            });
+        }
+    }
+    getBase64 = (e) => {
         this.setState({
-            [name]: value
+            displayImg: URL.createObjectURL(e.target.files[0])
         });
+        var file = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            console.log(reader.result);
+            this.setState({
+                avatar: reader.result
+            })
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        }
     }
     EditUserInfo = (event) => {
         let { name, avatar } = this.state;
@@ -69,10 +91,10 @@ class Header extends Component {
             }
         }).then(res => {
             var data = res.data;
-            if (data.success) {
-                alert("login successful");
+            if (data.status) {
+                alert("update successful");
             } else {
-                alert("login failed");
+                alert("update failed");
             }
         }).catch(err => {
             console.log(err);
@@ -90,6 +112,7 @@ class Header extends Component {
         }).then(res => {
             var data = res.data;
             if (data.status) {
+                console.log(data.avatar);
                 this.setState({
                     name: data.name,
                     avatar: data.avatar
@@ -98,20 +121,6 @@ class Header extends Component {
         }).catch(err => {
             console.log(err);
         });
-    }
-    onClose = () => {
-        this.setState({ preview: null })
-    }
-
-    onCrop = (preview) => {
-        this.setState({ preview })
-    }
-
-    onBeforeFileLoad = (elem) => {
-        if (elem.target.files[0].size > 71680) {
-            alert("File is too big!");
-            elem.target.value = "";
-        };
     }
     showEditName = () => {
         this.setState({
@@ -147,7 +156,7 @@ class Header extends Component {
                             <span>{name}</span>
 
                             <div className="avatar" onClick={this.onToggleLogout}>
-                                <img src={imgBg} className="img-circle" alt="avatar" width="40px" height="40px" />
+                                <img src={avatar} className="img-circle" alt="avatar" width="40px" height="40px" />
                             </div>
                             {showInfo ?
 
@@ -169,25 +178,26 @@ class Header extends Component {
                 <Modal isOpen={showUserInfo}>
                     <ModalHeader>User Information</ModalHeader>
                     <ModalBody>
-                        <div className="text-center img-user-info"><img src={imgBg} className="img-circle text-center" alt="avatar" width="80px" height="80px" /></div>
+                        <div className="text-center img-user-info"><img src={avatar} className="img-circle text-center" alt="avatar" width="80px" height="80px" /></div>
                         {!showEditName ?
                             <div>
                                 <div className="title text-center edit-name">{name}</div>
                                 <MdModeEdit className="editName" onClick={this.showEditName} />
+                                <input type="file" name="avatar" onChange = {this.onChange} />
                             </div>
                             :
                             <div className="form-group">
                                 <label className="title">Name:</label>
-                                <input type="text" className="form-control" placeholder="Enter password" required value={name} onChange={this.onChange} />
+                                <input type="text" className="form-control" placeholder="Enter password" name ="name" required value={name} onChange={this.onChange} />
                             </div>
                         }
                         <div className="form-group">
                             <label className="title">Phone Number:</label>
-                            <input type="text" className="form-control" placeholder="Enter phone" required value="0389632456" onChange={this.onChange} />
+                            <input type="text" className="form-control" placeholder="Enter phone" name="phone" required value="0389632456" onChange={this.onChange} />
                         </div>
                         <div className="form-group">
                             <label className="title">Birthday:</label>
-                            <input type="date" className="form-control" onChange={this.onChange} />
+                            <input type="date" className="form-control" name="dob" onChange={this.onChange} />
                         </div>
                         <div className="form-group">
                             <label className="title">Sex:</label>

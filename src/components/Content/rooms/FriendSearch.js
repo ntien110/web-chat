@@ -41,7 +41,7 @@ class FriendSearch extends Component {
                 {
                     this.props.friendSearch.map((friend) => {
                         return (
-                            <div className="row friend" key={friend.id}>
+                            <div className="row friend" key={friend.id} onClick={() => this.onShowFriendInfo(friend)}>
                                 <div className="col-sm-2"><img src={imBg} className="img-circle" alt="avatar user" width="40px" height="40px" /></div>
                                 <div className="col-sm-7 friend-name">{friend.name}</div>
                             </div>
@@ -51,9 +51,9 @@ class FriendSearch extends Component {
                 {
                     this.props.notFriendSearch.map((friend) => {
                         return (
-                            <div className="row friend" key={friend.id} onClick={() => this.onShowFriendInfo(friend)}>
+                            <div className="row friend" key={friend.id} >
                                 <div className="col-sm-2"><img src={imBg} className="img-circle" alt="avatar user" width="40px" height="40px" /></div>
-                                <div className="col-sm-7 friend-name">{friend.name}</div>
+                                <div className="col-sm-7 friend-name" onClick={() => this.onShowFriendInfo(friend)}>{friend.name}</div>
                                 <div className="col-sm-3">
                                     <Button color="secondary" onClick={() => this.onSubmitAdd(this.props.userId, friend.id)}>Add</Button>
                                 </div>

@@ -12,13 +12,20 @@ class RoomInfo extends Component {
     render() {
         let allConstants = this.allConstants;
         let { room } = this.props;
+        let userStatus = '';
+        for (let i in this.props.onlineRooms){
+            if (this.props.onlineRooms[i].roomId === room.roomId)  {
+                userStatus = 'user-status';
+                break;
+            }
+        }
         let lastMessage = room.lastMessage !== null ? room.lastMessage : { "Body": "", "time": "" };
         let time =  allConstants.formatDates(lastMessage.time);
         return (
             <div className="chat_people">
-                <div className="chat_img"> <img src={imBg} className="img-circle" alt="avatar user" width="40px" height="40px" /> </div>
+                <div className="chat_img"> <img src={room.avatar} className="img-circle" alt="avatar user" width="40px" height="40px" /> </div>
                 <div className="chat_ib">
-                    <h5>{room.name}<span className="chat_date">{time}</span></h5>
+                    <h5>{room.name}<div className={userStatus}></div><span className="chat_date">{time}</span></h5>
                     <p>{lastMessage.Body}</p>
                 </div>
             </div>
