@@ -50,9 +50,8 @@ class WriteMessage extends Component {
                         placeholder="Type your message..."
                         value={this.state.chatText}
                         onChange={this.handleChange}
-                        required
                         onKeyUp={(e) => this.userTyping(e)}
-                        className="form-control box-text"
+                        className="box-text"
                     >
                     </input>
                     <IoIosSend className="btn-send btn-msg" onClick={this.submitMessage}/>

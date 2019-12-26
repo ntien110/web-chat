@@ -99,6 +99,7 @@ class Content extends Component {
                                     onlineRooms={onlineRooms}
                                     onNewMessageArrival={onNewMessageArrival}
                                     setSelectedRoomId={this.setSelectedRoomId}
+                                    socket={socket}
                                 />
                             </div>
                             <div className='col-sm-6 p-0 content-mid'>
@@ -113,7 +114,9 @@ class Content extends Component {
                                     <Welcome />
                                 }
                             </div>
-                            <ContentRight userId={userId} />
+                            <div className='col-sm-3 p-0 content-right'>
+                                <ContentRight />
+                            </div>
                         </div>
                     </div>
                 </div>

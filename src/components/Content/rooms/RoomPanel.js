@@ -1,18 +1,32 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { IoMdSearch } from 'react-icons/io';
+import { MdSearch } from 'react-icons/md';
+import { Button } from 'reactstrap';
 //Component
 import RoomInfo from './RoomInfo';
+import ListFriend from './ListFriend';
+import FriendSearch from './FriendSearch';
+import ListWait from './ListWait';
 // Constants
 import Constants from './../../Constants';
 //css
 import './RoomPanel.css';
+
 class RoomPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
             rooms: [],
-            showLoading: true
+            showMessage: true,
+            search: '',
+            showListFriend: false,
+            showListWait: false,
+            listFriend: [],
+            listWait:[],
+            showAllFriend: false,
+            friendSearch: [],
+            notFriendSearch: [],
+            from: ''
         }
         // instantiate the Constants
         this.allConstants = new Constants();
@@ -20,7 +34,7 @@ class RoomPanel extends Component {
     componentWillReceiveProps(nextProps) {
         let newRooms = [...this.state.rooms];
         newRooms.forEach((room) => {
-            if (room.roomId == nextProps.onNewMessageArrival.roomId) {
+            if (room.roomId === nextProps.onNewMessageArrival.roomId) {
                 let lastMessage = room.lastMessage !== null ? room.lastMessage : { "Body": "", "time": "" };
                 // adjust the necessary field if the roomId matches
                 lastMessage.Body = nextProps.onNewMessageArrival.Body;
@@ -43,6 +57,9 @@ class RoomPanel extends Component {
         this.setState({ rooms: newRooms });
     }
     componentDidMount() {
+        this.props.socket.on("newFriendRequest", (data) => {
+            this.state.listWait.push(data);
+        })
         this.loadrooms();
     }
     loadrooms() {
@@ -75,6 +92,94 @@ class RoomPanel extends Component {
         this.setState({ activeRoomId: id });
         // this.changeReadStatus(id)
     }
+    onChange = (event) => {
+        var target = event.target;
+        var name = target.name;
+        var value = target.type === 'checkbox' ? target.checked : target.value;
+        this.setState({
+            [name]: value
+        });
+        let allConstants = this.allConstants;
+        axios({
+            method: 'POST',
+            url: allConstants.search,
+            data: {
+                userId: this.props.userId,
+                name: value
+            }
+        }).then(res => {
+            var data = res.data;
+            console.log("data", data);
+            if (data.status) {
+                this.setState({
+                    friendSearch: data.friend,
+                    notFriendSearch: data.notFriend
+                });
+            } else {
+                alert('search failed');
+            }
+            console.log(this.state.friendSearch, this.state.notFriendSearch);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+    onShowListFriend = (event) => {
+        let allConstants = this.allConstants;
+        this.setState({
+            showListFriend: true,
+            showMessage: false
+        });
+        axios({
+            method: 'POST',
+            url: allConstants.getListFriend,
+            data: {
+                userId: this.props.userId
+            }
+        }).then(res => {
+            var data = res.data;
+            if (data.status) {
+                this.setState({
+                    listFriend: data.friendList
+                })
+                console.log(data);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+        event.preventDefault();
+    }
+    onShowAddfriend = (event) => {
+        let allConstants = this.allConstants;
+        this.setState({
+            showListFriend: false,
+            showMessage: false
+        });
+        axios({
+            method: 'POST',
+            url: allConstants.getListWait,
+            data: {
+                userId: this.props.userId
+            }
+        }).then(res => {
+            var data = res.data;
+            if (data.status) {
+                this.setState({
+                    listWait: data.waitList
+                })
+                console.log(data);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+        event.preventDefault();
+
+    }
+    onShowMessage = () => {
+        this.setState({
+            showMessage: true,
+            showListFriend: false
+        });
+    }
     // function to change the room status from read / unread
     // changeReadStatus(id) {
     //     let allRooms = [...this.state.rooms];
@@ -106,34 +211,50 @@ class RoomPanel extends Component {
     //     })
     // }
     render() {
-        let { userId, setSelectedRoomId } = this.props;
-        let { activeRoomId, rooms } = this.state;
+        let { userId, setSelectedRoomId, socket } = this.props;
+        let { from, activeRoomId, rooms, showListFriend, showMessage, listFriend, listWait, showAllFriend, notFriendSearch, friendSearch, search } = this.state;
         return (
             <div className="inbox_chat">
-                <div class="search-box-wrapper">
-                    <input type="text" placeholder="Search..." class="search-box-input" />
-                    <button class="search-box-button"><IoMdSearch /></button>
-                </div>
-                <hr />
-                <div class="row">
-                    <div class="col-sm-4 btn-left active-btn-left">Message</div>
-                    <div class="col-sm-4 btn-left">Friend</div>
-                    <div class="col-sm-4 btn-left">Add friend</div>
+                <div className="search-box-wrapper">
+                    <input type="text" placeholder="Search..." className="search-box-input" name="search" onChange={this.onChange} />
+                    <button className="search-box-button"><MdSearch /></button>
                 </div>
                 <hr />
                 {
-                    rooms.map((room) => {
-                        return (
-                            <div className={activeRoomId === room.roomId ? 'chat_list active_chat' : 'chat_list'} key={room.roomId} onClick={() => this.setSelectedRoomId(room.roomId)}>
-                                <RoomInfo
-                                    room={room}
-                                    userId={userId}
-                                    setSelectedRoomId={setSelectedRoomId}
-
-                                />
+                    search !== '' ?
+                        <FriendSearch search={search} notFriendSearch={notFriendSearch} friendSearch={friendSearch} socket={socket} userId={userId} />
+                        :
+                        <div>
+                            <div className="row">
+                                <div className={showMessage ? "col-sm-4 btn-left active-btn-left" : "col-sm-4 btn-left"} onClick={this.onShowMessage}>Message</div>
+                                <div className={showListFriend ? "col-sm-4 btn-left active-btn-left" : "col-sm-4 btn-left"} onClick={this.onShowListFriend}>Friend</div>
+                                <div className={!showMessage && !showListFriend ? "col-sm-4 btn-left active-btn-left" : "col-sm-4 btn-left"} onClick={this.onShowAddfriend}>Add friend</div>
                             </div>
-                        )
-                    })
+                            <hr />
+                            <div className="message-box">
+                            {
+
+                                showMessage ?
+                                    rooms.map((room) => {
+                                        return (
+                                            <div className={activeRoomId === room.roomId ? 'chat_list active_chat' : 'chat_list'} key={room.roomId} onClick={() => this.setSelectedRoomId(room.roomId)}>
+                                                <RoomInfo
+                                                    room={room}
+                                                    userId={userId}
+                                                    setSelectedRoomId={setSelectedRoomId}
+
+                                                />
+                                            </div>
+                                        )
+                                    })
+                                    :
+                                    showListFriend ?
+                                        <ListFriend listFriend={listFriend} />
+                                        :
+                                        <ListWait listWait={listWait} userId={userId} />
+                            }
+                            </div>
+                        </div>
                 }
             </div>
         );

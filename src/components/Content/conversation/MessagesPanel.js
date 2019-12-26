@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import imBg from './../../../images/bg-login.jpg';
+import ScrollToBottom from 'react-scroll-to-bottom';
 // component
 import Message from './Message';
 import WriteMessage from './WriteMessage';
- 
+
 // Constants
 import Constants from './../../Constants';
- 
+
 class MessagesPanel extends Component {
- 
+
     constructor(props) {
         super(props);
         this.state = {
@@ -21,29 +22,23 @@ class MessagesPanel extends Component {
     componentDidMount() {
         if (this.props.selectedRoomId !== '')
             this.loadConversation(this.props.selectedRoomId);
-        this.scrollToBottom();
-        if (this.props.selectedRoomId !== '') 
-            this.loadConversation(this.props.selectedRoomId);
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.selectedRoomId !== nextProps.selectedRoomId) {
             console.log("change roomId", nextProps.selectedRoomId);
-            if (!this.state.messages[nextProps.selectedRoomId]){
+            if (!this.state.messages[nextProps.selectedRoomId]) {
                 this.loadConversation(nextProps.selectedRoomId);
             }
         }
- 
-        if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoomId) {
-            let messages=this.state.messages
+        else {
+            if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoomId) {
+                let messages = this.state.messages
                 messages[this.props.selectedRoomId].push(nextProps.onNewMessageArrival)
-            this.setState({ messages });
+                this.setState({ messages });
+            }
         }
-        this.scrollToBottom();
     }
- 
-    scrollToBottom() {
-        this.messageEnd.scrollIntoView({ behavior: 'smooth' });
-    }
+
     // load the conversation of the selected friend
     loadConversation(id) {
         let selectedRoomId = (id) ? id : '' // this.props.selectedRoomId ||
@@ -72,7 +67,7 @@ class MessagesPanel extends Component {
     }
     render() {
         let { messages } = this.state;
-        let { userId, selectedRoomId, socket} = this.props;
+        let { userId, selectedRoomId, socket } = this.props;
         return (
             <div>
                 <div className="user-current" >
@@ -82,20 +77,18 @@ class MessagesPanel extends Component {
                     <div className="user-name"> {selectedRoomId} </div>
                     <div className="user-status"></div>
                 </div>
-                <div className="mesgs" id="mesgs">
+                <div className="mesgs">
                     <Message
                         Messages={messages[selectedRoomId]}
                         userId={userId}
                     />
-                    <div style={{ float: "left", clear: "both" }} ref={(el) => { this.messageEnd = el; }}></div>
-                </div>
                     <WriteMessage
                         userId={userId}
                         selectedRoomId={selectedRoomId}
                         socket={socket}
                     />
-                 </div>
- 
+                </div>
+            </div>
         );
     }
 }

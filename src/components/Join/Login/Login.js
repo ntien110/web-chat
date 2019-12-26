@@ -41,7 +41,7 @@ class Login extends Component {
             } else {
                 // reload the page
                 console.log("login failed");
-               alert("login failed");
+                alert("login failed");
             }
         }).catch(err => {
             console.log(err);

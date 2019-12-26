@@ -10,7 +10,10 @@ class Constants {
         this.checkUsername = `${this.url}/register/{username}`;
         this.getConversation = `${this.url}/getMessage`;
         this.getRooms = `${this.url}/rooms`;
+        this.getListFriend = `${this.url}/listFriend`;
+        this.getListWait = `${this.url}/listWait`;
         this.webSocketServer = `http://${this.link}:3002`;
+        this.search = `${this.url}/searchUser`;
 
         // initialize
         this.theWeek = makeFormattedWeek();

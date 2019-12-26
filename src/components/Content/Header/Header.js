@@ -140,8 +140,8 @@ class Header extends Component {
                             {/* notification */}
                             {/* <div className="notif n3">3</div> */}
                             {/* <a className="iconbtn fa fa-bell"></a> */} 
-                            <FaUserFriends className='iconbtn'/>
-                            <TiMessages className='iconbtn'/>
+                            {/* <FaUserFriends className='iconbtn'/>
+                            <TiMessages className='iconbtn'/> */}
                         </div>
                         <div className="col-sm-3 iconuser">
                             <span>{name}</span>

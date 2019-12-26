@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // Constants
+import imBg from './../../../images/bg-login.jpg';
 import Constants from './../../Constants'
 class Message extends Component {
     constructor(props) {
@@ -7,18 +8,25 @@ class Message extends Component {
         // instantiate the Constants
         this.allConstants = new Constants();
     }
+    componentDidUpdate() {
+        const message = document.getElementById("message");
+        if (message) {
+            console.log("scroll");
+            message.scrollTo(0, message.scrollHeight);
+        }
+    }
     render() {
         let allConstants = this.allConstants;
         let messages = this.props.Messages?this.props.Messages:[];
         return (
-            <div className="msg_history">
+            <div className="msg_history" id="message">
                 {
                     messages.map((msg, index) => {
                         if (msg.From !== this.props.userId) {
                             return (
                                 <div className="incoming_msg" key={index} >
                                     <div className="incoming_msg_img" >
-                                        <img src="" className="img-circle" alt="Cinque Terre" width="40px" height="40px" />
+                                        <img src={imBg} className="img-circle" alt="Cinque Terre" width="40px" height="40px" />
                                     </div>
                                     <div className="received_msg">
                                         <div className="received_withd_msg" >

@@ -1,0 +1,12 @@
+.friend{
+    padding:15px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ebebeb;
+}
+.friend-name{
+    line-height: 35px;
+    font-size: 18px;
+}
+.friend:hover{
+    background-color: #ebebeb;
+}
