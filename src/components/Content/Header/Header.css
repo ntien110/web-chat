@@ -36,3 +36,14 @@
 .edit-name{
     font-size: 20px;
 }
+.edituserDark{
+    position: absolute;
+    top: 45px;
+    right: 50px;
+    z-index: 999;
+    box-shadow: 0px 0px 5px #fff;
+    background-color: #000;
+    color: #fff;
+    border-radius: 3px;  
+    padding: 3px;
+} 

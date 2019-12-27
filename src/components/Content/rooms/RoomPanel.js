@@ -61,6 +61,9 @@ class RoomPanel extends Component {
             this.state.listWait.push(data);
         })
         this.loadrooms();
+        this.props.socket.on("newRoom",()=>{
+            this.loadrooms();
+        })
     }
     loadrooms() {
         let allConstants = this.allConstants;
@@ -91,12 +94,12 @@ class RoomPanel extends Component {
         });
     }
 
-    setSelectedRoomId = (id) => {
+    setSelectedRoomId = (room) => {
         // pass the selected room id augmented with logged in userid to the parent 
-        this.props.setSelectedRoomId(id);
+        this.props.setSelectedRoomId(room);
         // set active room id for highlighting purpose
-        this.setState({ activeRoomId: id });
-        this.changeReadStatus(id);
+        this.setState({ activeRoomId: room.roomId });
+        //this.changeReadStatus(id);
     }
     onChange = (event) => {
         var target = event.target;
@@ -147,7 +150,7 @@ class RoomPanel extends Component {
                 this.setState({
                     listFriend: data.friendList
                 })
-                console.log(data);
+                //console.log(data);
             }
         }).catch(err => {
             console.log(err);
@@ -240,7 +243,7 @@ class RoomPanel extends Component {
                                 showMessage ?
                                     rooms.map((room) => {
                                         return (
-                                            <div className={activeRoomId === room.roomId ? 'chat_list active_chat' : 'chat_list'} key={room.roomId} onClick={() => this.setSelectedRoomId(room.roomId)}>
+                                            <div className={activeRoomId === room.roomId ? 'chat_list active_chat' : 'chat_list'} key={room.roomId} onClick={() => this.setSelectedRoomId(room)}>
                                                 <RoomInfo
                                                     room={room}
                                                     userId={userId}

@@ -20,20 +20,20 @@ class MessagesPanel extends Component {
         this.allConstants = new Constants();
     }
     componentDidMount() {
-        if (this.props.selectedRoomId !== '')
-            this.loadConversation(this.props.selectedRoomId);
+        if (this.props.selectedRoom.roomId !== '')
+            this.loadConversation(this.props.selectedRoom.roomId);
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.selectedRoomId !== nextProps.selectedRoomId) {
-            console.log("change roomId", nextProps.selectedRoomId);
-            if (!this.state.messages[nextProps.selectedRoomId]) {
-                this.loadConversation(nextProps.selectedRoomId);
+        if (this.props.selectedRoom.roomId !== nextProps.selectedRoom.roomId) {
+            console.log("change roomId", nextProps.selectedRoom.roomId);
+            if (!this.state.messages[nextProps.selectedRoom.roomId]) {
+                this.loadConversation(nextProps.selectedRoom.roomId);
             }
         }
         else {
-            if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoomId) {
+            if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoom.roomId) {
                 let messages = this.state.messages
-                messages[this.props.selectedRoomId].push(nextProps.onNewMessageArrival)
+                messages[this.props.selectedRoom.roomId].push(nextProps.onNewMessageArrival)
                 this.setState({ messages });
             }
         }
@@ -67,24 +67,25 @@ class MessagesPanel extends Component {
     }
     render() {
         let { messages } = this.state;
-        let { userId, selectedRoomId, socket } = this.props;
+        let { userId, selectedRoom, socket } = this.props;
         return (
             <div>
                 <div className="user-current" >
                     <div className="user-img" >
-                        <img src={imBg} className="img-circle" alt="Cinque Terre" width="40px" height="40px" />
+                        <img src={selectedRoom.avatar} className="img-circle" alt="Cinque Terre" width="40px" height="40px" />
                     </div>
-                    <div className="user-name"> {selectedRoomId} </div>
+                    <div className="user-name"> {selectedRoom.name} </div>
                     <div className="user-status"></div>
                 </div>
                 <div className="mesgs">
                     <Message
-                        Messages={messages[selectedRoomId]}
+                        Messages={messages[selectedRoom.roomId]}
                         userId={userId}
+                        avatar={selectedRoom.avatar}
                     />
                     <WriteMessage
                         userId={userId}
-                        selectedRoomId={selectedRoomId}
+                        selectedRoomId={selectedRoom.roomId}
                         socket={socket}
                     />
                 </div>

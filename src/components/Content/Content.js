@@ -23,8 +23,9 @@ class Content extends Component {
             offlineRooms: null,
             socket: '',
             onNewMessageArrival: '',
-            selectedRoomId: '',
-            showMessagePanel: false
+            selectedRoom: '',
+            showMessagePanel: false,
+            switchmode: ''
         };
     }
     getOnlineRooms = (data) => {
@@ -57,7 +58,7 @@ class Content extends Component {
             this.setState({
                 onlineRooms
             })
-            console.log("content.js ---49: ", userId, roomId, JSON.stringify(onlineRooms));
+            //console.log("content.js ---49: ", userId, roomId, JSON.stringify(onlineRooms));
         });
         this.socket.on("iAmOffline", ({ roomId, userId }) => {
             
@@ -72,38 +73,46 @@ class Content extends Component {
                 // console.log("index found: ",index)
                 if (index !== -1) room.splice(index, 1);
                 onlineRooms[roomId] = room
+                if(onlineRooms[roomId].length === 0){
+                    delete onlineRooms[roomId]
+                }
             }
 
-            if(onlineRooms[roomId].length === 0){
-                delete onlineRooms[roomId]
-            }
+            
 
             this.setState({
                 onlineRooms
             })
-            console.log("content.js ---72 after: ", JSON.stringify(this.state.onlineRooms))
+            //console.log("content.js ---72 after: ", JSON.stringify(this.state.onlineRooms))
             // console.log("iAmOffline's data: ",roomId, userId)
         })
     }
-    setSelectedRoomId = (id) => {
-        console.log('id here in content: ', id);
-        if (id !== this.state.selectedRoomId)
+    setSelectedRoomId = (room) => {
+        console.log('id here in content: ', room.roomId);
+        if (room.roomId !== this.state.selectedRoom.roomId)
         {
             this.setState({
-                selectedRoomId: id,
+                selectedRoom: room,
                 showMessagePanel: true
             });
         }
     }
+    onSwitchMode = (value) => {
+        this.setState({
+            switchmode : value
+        })
+    }
     render() {
         let { userId } = this.props;
-        let { selectedRoomId, onNewMessageArrival, onlineRooms, showMessagePanel } = this.state;
+        let { selectedRoom, onNewMessageArrival, onlineRooms, showMessagePanel, switchmode } = this.state;
         let socket = this.socket;
-        return (
-            <div>
-                <Header userId={userId} />
+        let body = '';
+        if (switchmode) body = 'bodyDark';
 
-                <div className="container-fluid p-0 containerDark">
+        return (
+            <div className={body}>
+                <Header userId={userId} onSwitchMode={this.onSwitchMode}/>
+                <div className="container-fluid p-0">
                     <div className="content">
                         <div className="row m-0">
                             <div className='col-sm-3 p-0 content-left'>
@@ -116,21 +125,28 @@ class Content extends Component {
                                     socket={socket}
                                 />
                             </div>
-                            <div className='col-sm-6 p-0 content-mid'>
-                                {showMessagePanel ?
-                                    <MessagesPanel
-                                        socket={socket}
-                                        userId={userId}
-                                        selectedRoomId={selectedRoomId}
-                                        onNewMessageArrival={onNewMessageArrival}
-                                    />
-                                    :
-                                    <Welcome />
-                                }
-                            </div>
-                            <div className='col-sm-3 p-0 content-right'>
-                                <ContentRight />
-                            </div>
+                            
+                            {showMessagePanel ?
+                                <div className='col-sm-9 p-0 content-mid'>
+                                    <div className="row m-0">
+                                        <div className='col-sm-8 p-0 content-mid'>                     
+                                                <MessagesPanel
+                                                    socket={socket}
+                                                    userId={userId}
+                                                    selectedRoom={selectedRoom}
+                                                    onNewMessageArrival={onNewMessageArrival}
+                                                />
+                                        </div>
+                                        <div className='col-sm-4 p-0 content-right'>
+                                            <ContentRight selectedRoom={selectedRoom}/>
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                <div className='col-sm-9 p-0 content-mid'>
+                                    <Welcome />  
+                                </div> 
+                            }
                         </div>
                     </div>
                 </div>

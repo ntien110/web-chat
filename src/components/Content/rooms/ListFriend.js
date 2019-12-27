@@ -25,13 +25,14 @@ class ListFriend extends Component {
     }
     render() {
         let {showInfo, friendInfo} = this.state;
+        //console.log(this.props.listFriend!=null?[]:this.props.listFriend)
         return (
             <div>
                 {
                     this.props.listFriend.map((friend) => {
                         return (
                             <div className="row friend" key={friend.id} onClick={() => this.onShowFriendInfo(friend)}>
-                                <div className="col-sm-2"><img src={imBg} className="img-circle" alt="avatar user" width="40px" height="40px" /></div>
+                                <div className="col-sm-2"><img src={friend.avatar} className="img-circle" alt="avatar user" width="40px" height="40px" /></div>
                                 <div className="col-sm-10 friend-name">{friend.name}</div>                    
                             </div>
                         )

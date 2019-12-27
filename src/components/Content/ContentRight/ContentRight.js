@@ -6,13 +6,14 @@ import {IoMdColorPalette} from 'react-icons/io';
 import './ContentRight.css';
 class ContentRight extends Component {
     render() {
+        let {selectedRoom} = this.props;
         return (
             <div>
                 <div className="user-info text-center">
                     <div className="img-user">
-                        <img src={imBg} className="img-circle" alt="Cinque Terre" width="80px" height="80px" />
+                        <img src={selectedRoom.avatar} className="img-circle" alt="Cinque Terre" width="80px" height="80px" />
                     </div>
-                    <div className="name-user">test room</div>
+                    <div className="name-user">{selectedRoom.name}</div>
                 </div>
                 <div className="user-option">
                     <div className="change-theme">

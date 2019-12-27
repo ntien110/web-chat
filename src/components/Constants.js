@@ -1,7 +1,7 @@
 class Constants {
     constructor() {
         // all the URLs
-        this.link='192.168.1.224';
+        this.link='192.168.1.49';
         this.url = `http://${this.link}:3000`;
         this.login = `${this.url}/`;
         this.register = `${this.url}/register`;

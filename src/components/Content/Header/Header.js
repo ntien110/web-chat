@@ -22,7 +22,8 @@ class Header extends Component {
             avatar: '',
             preview: null,
             src: src,
-            showEditName: false
+            showEditName: false,
+            switchmode: ''
         };
         // instantiate the Constants
         this.allConstants = new Constants();
@@ -39,7 +40,8 @@ class Header extends Component {
     OpenUserInfo = () => {
         this.setState({
             showUserInfo: true,
-            showInfo: false
+            showInfo: false,
+            showEditName: false
         });
     }
     closeEditUserInfo = () => {
@@ -52,6 +54,12 @@ class Header extends Component {
         var target = event.target;
         var name = target.name;
         var value = target.type === 'checkbox' ? target.checked : target.value;
+        if (target.type === 'checkbox') {
+            this.props.onSwitchMode(value);
+            this.setState({
+                switchmode: value
+            })
+        }
         if (target.type ==='file'){
             this.getBase64(event);
         }
@@ -92,7 +100,9 @@ class Header extends Component {
         }).then(res => {
             var data = res.data;
             if (data.status) {
-                alert("update successful");
+                //alert("update successful");
+                this.closeEditUserInfo();
+                
             } else {
                 alert("update failed");
             }
@@ -129,7 +139,9 @@ class Header extends Component {
     }
     render() {
 
-        let { name, avatar, showInfo, showUserInfo, showEditName } = this.state;
+        let { name, avatar, showInfo, showUserInfo, showEditName, switchmode } = this.state;
+        let edituser = 'edituser';
+        if (switchmode) edituser = 'edituserDark';
         return (
             <div className="container-fluid p-30">
                 <div className="container">
@@ -160,7 +172,7 @@ class Header extends Component {
                             </div>
                             {showInfo ?
 
-                                <div className="edituser">
+                                <div className={edituser}>
                                     <div className="box-edituser" onClick={this.OpenUserInfo}>Update Information</div>
                                     <hr />
                                     <div className="box-edituser" onClick={this.Logout} >Logout</div>
@@ -171,7 +183,7 @@ class Header extends Component {
 
                         </div>
                         <div className="switchmode">
-                            <input type="checkbox" />
+                            <input type="checkbox" name="switchmode" onChange={this.onChange}/>
                         </div>
                     </div>
                 </div>
@@ -183,7 +195,7 @@ class Header extends Component {
                             <div>
                                 <div className="title text-center edit-name">{name}</div>
                                 <MdModeEdit className="editName" onClick={this.showEditName} />
-                                <input type="file" name="avatar" onChange = {this.onChange} />
+                                
                             </div>
                             :
                             <div className="form-group">
@@ -191,7 +203,8 @@ class Header extends Component {
                                 <input type="text" className="form-control" placeholder="Enter password" name ="name" required value={name} onChange={this.onChange} />
                             </div>
                         }
-                        <div className="form-group">
+                        <input type="file" name="avatar" onChange = {this.onChange} />  
+                        {/* <div className="form-group">
                             <label className="title">Phone Number:</label>
                             <input type="text" className="form-control" placeholder="Enter phone" name="phone" required value="0389632456" onChange={this.onChange} />
                         </div>
@@ -206,7 +219,7 @@ class Header extends Component {
                             <input type="radio" name="sex" className="sex" value="Female"/> Female
                             
                         </div>
-                        
+                         */}
 
                     </ModalBody>
                     <ModalFooter>

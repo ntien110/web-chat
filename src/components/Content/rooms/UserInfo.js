@@ -13,7 +13,7 @@ class UserInfo extends Component {
                     <ModalHeader>User Information</ModalHeader>
                     <ModalBody>
                         <div className="text-center img-user-info">
-                            <img src={imBg} className="img-circle text-center" alt="avatar" width="80px" height="80px" />
+                            <img src={this.props.friendInfo.avatar} className="img-circle text-center" alt="avatar" width="80px" height="80px" />
                             <div className="title text-center edit-name">{this.props.friendInfo.name}</div>
                         </div>
 

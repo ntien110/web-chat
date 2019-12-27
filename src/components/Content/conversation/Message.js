@@ -9,15 +9,16 @@ class Message extends Component {
         this.allConstants = new Constants();
     }
     componentDidUpdate() {
+        console.log(window.pageYOffset);
         const message = document.getElementById("message");
-        if (message) {
-            console.log("scroll");
+        if (message) {        
             message.scrollTo(0, message.scrollHeight);
         }
     }
     render() {
         let allConstants = this.allConstants;
         let messages = this.props.Messages?this.props.Messages:[];
+        console.log(messages)
         return (
             <div className="msg_history" id="message">
                 {
@@ -26,7 +27,7 @@ class Message extends Component {
                             return (
                                 <div className="incoming_msg" key={index} >
                                     <div className="incoming_msg_img" >
-                                        <img src={imBg} className="img-circle" alt="Cinque Terre" width="40px" height="40px" />
+                                        <img src={this.props.avatar} className="img-circle" alt="Cinque Terre" width="40px" height="40px" />
                                     </div>
                                     <div className="received_msg">
                                         <div className="received_withd_msg" >
