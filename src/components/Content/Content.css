@@ -442,8 +442,7 @@ body {
     /* background: #fff; */
 }
 
-.sent_msg p {
-    background: #6f5499 none repeat scroll 0 0;
+.sent_msg p { 
     border-radius: 20px;
     font-size: 14px;
     margin: 0;
@@ -451,6 +450,27 @@ body {
     padding: 5px 10px 5px 12px;
     width: 100%;
 }
+.default-theme p{
+    background: #6f5499 none repeat scroll 0 0;
+}
+.green-theme p{
+    background: #005018 none repeat scroll 0 0;
+}
+.blue-theme p{
+    background: #1d0364 none repeat scroll 0 0;
+}
+.red-theme p{
+    background: #920000 none repeat scroll 0 0;
+}
+.pink-theme p{
+    background: #8d0755 none repeat scroll 0 0;
+}
+
+
+
+
+
+
 
 .outgoing_msg {
     overflow: hidden;
@@ -494,7 +514,7 @@ body {
     outline: none;
 }
 .btn-send{
-    margin-left: 15px;
+    margin-left: 10px;
 }
 .btn-msg{
     width: 35px;

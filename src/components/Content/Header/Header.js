@@ -70,9 +70,9 @@ class Header extends Component {
         }
     }
     getBase64 = (e) => {
-        this.setState({
-            displayImg: URL.createObjectURL(e.target.files[0])
-        });
+        // this.setState({
+        //     displayImg: URL.createObjectURL(e.target.files[0])
+        // });
         var file = e.target.files[0];
         let reader = new FileReader();
         reader.readAsDataURL(file);

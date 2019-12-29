@@ -9,3 +9,12 @@
 .change-theme{
     cursor: pointer;
 }
+.circle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /* border: 1px solid #000; */
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+}

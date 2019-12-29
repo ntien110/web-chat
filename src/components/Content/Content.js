@@ -25,7 +25,8 @@ class Content extends Component {
             onNewMessageArrival: '',
             selectedRoom: '',
             showMessagePanel: false,
-            switchmode: ''
+            switchmode: '',
+            colorTheme: 'default-theme' 
         };
     }
     getOnlineRooms = (data) => {
@@ -49,24 +50,26 @@ class Content extends Component {
             //console.log(this.state.onNewMessageArrival);
         });
         this.socket.on("iAmOnline", ({ userId, roomId }) => {
-            console.log("gfhgf",roomId);
+            console.log(roomId);
             let onlineRooms = this.state.onlineRooms;
-            let check = false;
+            // if (onlineRooms.hasOwnProperty(roomId)) {
+            //     onlineRooms[roomId].push(userId)
+            // } else {
+            //     onlineRooms[roomId] = [userId]
+            // }
             for (let i in onlineRooms){
                 if (onlineRooms[i].roomId === roomId)  {
-                    check = true;
+                    onlineRooms[i].online=true
                     break;
                 }
             }
-            if (check === false) onlineRooms.push(roomId);
-            console.log(onlineRooms);
+            console.log(onlineRooms)
             this.setState({
                 onlineRooms
             })
             //console.log("content.js ---49: ", userId, roomId, JSON.stringify(onlineRooms));
         });
         this.socket.on("iAmOffline", ({ roomId, userId }) => {
-            
             console.log(roomId);
             let onlineRooms = this.state.onlineRooms;
             // console.log("content.js ---61 pre: ",this.state.onlineRooms[roomId])
@@ -82,9 +85,15 @@ class Content extends Component {
             //         delete onlineRooms[roomId]
             //     }
             // }
-            let check = onlineRooms.indexOf(roomId);
-            if (check !== -1) onlineRooms.splice(check, 1);
-            console.log(onlineRooms);
+            console.log(onlineRooms, roomId)
+            for (let i in onlineRooms){
+                if (onlineRooms[i].roomId === roomId)  {
+                    onlineRooms[i].online=false
+                    break;
+                }
+            }
+            console.log(onlineRooms)
+
             this.setState({
                 onlineRooms
             })
@@ -107,15 +116,18 @@ class Content extends Component {
             switchmode : value
         })
     }
+    onChangeColor = (color) => {
+        this.setState({
+            colorTheme: color
+        });
+    } 
     render() {
         let { userId } = this.props;
-        let { selectedRoom, onNewMessageArrival, onlineRooms, showMessagePanel, switchmode } = this.state;
+        let { selectedRoom, onNewMessageArrival, onlineRooms, showMessagePanel, switchmode, colorTheme } = this.state;
         let socket = this.socket;
-        let body = '';
-        if (switchmode) body = 'bodyDark';
 
         return (
-            <div className={body}>
+            <div className={switchmode ? 'bodyDark' : ''}>
                 <Header userId={userId} onSwitchMode={this.onSwitchMode}/>
                 <div className="container-fluid p-0">
                     <div className="content">
@@ -140,10 +152,12 @@ class Content extends Component {
                                                     userId={userId}
                                                     selectedRoom={selectedRoom}
                                                     onNewMessageArrival={onNewMessageArrival}
+                                                    switchmode={switchmode}
+                                                    colorTheme={colorTheme}
                                                 />
                                         </div>
                                         <div className='col-sm-4 p-0 content-right'>
-                                            <ContentRight selectedRoom={selectedRoom}/>
+                                            <ContentRight selectedRoom={selectedRoom} onChangeColor={this.onChangeColor}/>
                                         </div>
                                     </div>
                                 </div>

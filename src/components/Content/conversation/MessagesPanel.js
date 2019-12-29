@@ -39,6 +39,7 @@ class MessagesPanel extends Component {
             this.loadConversation(this.props.selectedRoom.roomId, 10, new Date());
     }
     componentWillReceiveProps(nextProps) {
+        
         if (this.props.selectedRoom.roomId !== nextProps.selectedRoom.roomId) {
             console.log("change roomId", nextProps.selectedRoom.roomId);
             if (!this.state.messages[nextProps.selectedRoom.roomId]) {
@@ -46,9 +47,10 @@ class MessagesPanel extends Component {
             }
         }
         else {
-            if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoom.roomId) {
-                let messages = this.state.messages
-                messages[this.props.selectedRoom.roomId].push(nextProps.onNewMessageArrival)
+            if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoom.roomId && nextProps.switchmode === this.props.switchmode && nextProps.colorTheme === this.props.colorTheme) {
+                let messages = this.state.messages;
+                console.log("o day");
+                messages[this.props.selectedRoom.roomId].push(nextProps.onNewMessageArrival);
                 this.setState({ messages });
             }
         }
@@ -111,7 +113,7 @@ class MessagesPanel extends Component {
     }
     render() {
         let { messages, stickers } = this.state;
-        let { userId, selectedRoom, socket} = this.props;
+        let { userId, selectedRoom, socket, colorTheme} = this.props;
         
         return (
             <div>
@@ -129,6 +131,7 @@ class MessagesPanel extends Component {
                         avatar={selectedRoom.avatar}
                         reachTop={this.reachTop}
                         stickers={stickers}
+                        colorTheme={colorTheme}
                     />
                     <WriteMessage
                         userId={userId}

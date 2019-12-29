@@ -24,8 +24,8 @@ class Message extends Component {
     render() {
         let allConstants = this.allConstants;
         let messages = this.props.Messages ? this.props.Messages : [];
-        let { stickers } = this.props;
-        console.log(stickers);
+        let { stickers, colorTheme} = this.props;
+        //console.log(stickers);
         console.log(messages);
         return (
             <div
@@ -39,18 +39,21 @@ class Message extends Component {
                 {
                     messages.map((msg, index) => {
                         let body = '';
-                        console.log("kk",msg.Type);
+                        //console.log("kk",msg.Type);
                         if (msg.Type === 'Sticker') {
                             for (let i in stickers) {
                                 if (stickers[i].id === msg.Body) {
                                     body = stickers[i].body;
-                                    console.log("sticker");
+                                    //console.log("sticker");
                                 }
                             }
                         }
                         else if (msg.Type === 'Text') {
                             body = msg.Body;
-                            console.log("text");
+                            //console.log("text");
+                        } else {
+                            body = msg.Body;
+                            //console.log("Image");
                         }
                         if (msg.From !== this.props.userId) {
                             return (
@@ -64,7 +67,7 @@ class Message extends Component {
                                                 msg.Type === 'Text' ?
                                                     <p>{body}</p>
                                                     :
-                                                    <img src={body} className="img-circle" alt="Cinque Terre" width="100px" height="100px" />
+                                                    <img src={body} alt="Cinque Terre" width="100px" height="100px" />
                                             }
                                             <span className="time_date" >{allConstants.formatDates(msg.time)}</span>
                                         </div>
@@ -74,12 +77,12 @@ class Message extends Component {
                         } else {
                             return (
                                 <div className="outgoing_msg" key={index} >
-                                    <div className="sent_msg" >
+                                    <div className={`sent_msg ${colorTheme}`}>
                                         {
                                             msg.Type === 'Text' ?
                                                 <p>{body}</p>
                                                 :
-                                                <img src={body} className="img-circle" alt="Cinque Terre" width="100px" height="100px" />
+                                                <img src={body} alt="Cinque Terre" width="100px" height="100px" />
                                         }
                                         <span className="time_date" >{allConstants.formatDates(msg.time)}</span>
                                     </div>

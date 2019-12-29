@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { IoIosSend } from 'react-icons/io';
-import { MdInsertEmoticon } from 'react-icons/md';
+import { MdInsertEmoticon, MdAttachFile } from 'react-icons/md';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import axios from 'axios';
 // Constants
@@ -10,7 +10,8 @@ class WriteMessage extends Component {
         super();
         this.state = {
             chatText: '',
-            showSticker: false
+            showSticker: false,
+            avatar: ''
         };
         // instantiate the Constants
         this.allConstants = new Constants();
@@ -20,6 +21,31 @@ class WriteMessage extends Component {
             chatText: e.target.value
         });
     }
+    // getBase64Img = (e) => {
+    //     var file = e.target.files[0];
+    //     let reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.onload = () => {
+    //         //console.log(reader.result);
+    //         let data = {
+    //             time: new Date(),
+    //             Body: reader.result,
+    //             From: this.props.userId,
+    //             roomId: this.props.selectedRoomId,
+    //             Type: "Image"
+    //         }
+    //         //console.log('the message', data);
+    //         // console.log('length of the message', data.msgBody.length);
+    
+    //         // emit the message
+    //         if (data.Body.length > 0) {
+    //             this.props.socket.emit('send', data);
+    //         }
+    //     };
+    //     reader.onerror = function (error) {
+    //         console.log('Error: ', error);
+    //     }
+    // }
     sendSticker = (sticker) => {   
         let data = {
             time: new Date(),
@@ -91,8 +117,9 @@ class WriteMessage extends Component {
                     >
                     </input>
                     <IoIosSend className="btn-send btn-msg" onClick={this.submitMessage} />
-                    <MdInsertEmoticon className="btn-send btn-msg" onClick={this.onShowSticker} />
-                    {/* <div className="fa fa-paper-plane btn-type" onClick={this.submitMessage}></div> */}
+                    <MdInsertEmoticon className="btn-send btn-msg" onClick={this.onShowSticker} />          
+                    {/* <input type="file" id="file" accept="image/*" /> 
+                    <label for="file"><MdAttachFile className="btn-send btn-msg"/></label> */}
                 </div>
                 <Modal isOpen={showSticker}>
                     <ModalHeader>Icon</ModalHeader>
