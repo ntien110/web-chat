@@ -49,12 +49,17 @@ class Content extends Component {
             //console.log(this.state.onNewMessageArrival);
         });
         this.socket.on("iAmOnline", ({ userId, roomId }) => {
+            console.log("gfhgf",roomId);
             let onlineRooms = this.state.onlineRooms;
-            if (onlineRooms.hasOwnProperty(roomId)) {
-                onlineRooms[roomId].push(userId)
-            } else {
-                onlineRooms[roomId] = [userId]
+            let check = false;
+            for (let i in onlineRooms){
+                if (onlineRooms[i].roomId === roomId)  {
+                    check = true;
+                    break;
+                }
             }
+            if (check === false) onlineRooms.push(roomId);
+            console.log(onlineRooms);
             this.setState({
                 onlineRooms
             })
@@ -67,19 +72,19 @@ class Content extends Component {
             // console.log("content.js ---61 pre: ",this.state.onlineRooms[roomId])
             // console.log(onlineRooms.hasOwnProperty(roomId), roomId)
 
-            if (onlineRooms.hasOwnProperty(roomId)) {
-                let room = onlineRooms[roomId]
-                let index = room.indexOf(userId);
-                // console.log("index found: ",index)
-                if (index !== -1) room.splice(index, 1);
-                onlineRooms[roomId] = room
-                if(onlineRooms[roomId].length === 0){
-                    delete onlineRooms[roomId]
-                }
-            }
-
-            
-
+            // if (onlineRooms.hasOwnProperty(roomId)) {
+            //     let room = onlineRooms[roomId]
+            //     let index = room.indexOf(userId);
+            //     // console.log("index found: ",index)
+            //     if (index !== -1) room.splice(index, 1);
+            //     onlineRooms[roomId] = room
+            //     if(onlineRooms[roomId].length === 0){
+            //         delete onlineRooms[roomId]
+            //     }
+            // }
+            let check = onlineRooms.indexOf(roomId);
+            if (check !== -1) onlineRooms.splice(check, 1);
+            console.log(onlineRooms);
             this.setState({
                 onlineRooms
             })

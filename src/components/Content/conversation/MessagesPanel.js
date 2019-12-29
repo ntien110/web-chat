@@ -15,19 +15,34 @@ class MessagesPanel extends Component {
         super(props);
         this.state = {
             messages: {},
+            stickers: []
         }
         // instantiate the Constants
         this.allConstants = new Constants();
     }
     componentDidMount() {
+        let allConstants = this.allConstants;
+        axios({
+            method: 'POST',
+            url: allConstants.getAllStickers
+        }).then(res => {
+            var data = res.data;
+            if (data.status) {            
+                this.setState({
+                    stickers: data.stickers['QooBee']
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
         if (this.props.selectedRoom.roomId !== '')
-            this.loadConversation(this.props.selectedRoom.roomId);
+            this.loadConversation(this.props.selectedRoom.roomId, 10, new Date());
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.selectedRoom.roomId !== nextProps.selectedRoom.roomId) {
             console.log("change roomId", nextProps.selectedRoom.roomId);
             if (!this.state.messages[nextProps.selectedRoom.roomId]) {
-                this.loadConversation(nextProps.selectedRoom.roomId);
+                this.loadConversation(nextProps.selectedRoom.roomId, 10, new Date());
             }
         }
         else {
@@ -40,7 +55,7 @@ class MessagesPanel extends Component {
     }
 
     // load the conversation of the selected friend
-    loadConversation(id) {
+    loadConversation(id, amount, time) {
         let selectedRoomId = (id) ? id : '' // this.props.selectedRoomId ||
         let allConstants = this.allConstants;
         axios({
@@ -48,8 +63,8 @@ class MessagesPanel extends Component {
             url: allConstants.getConversation,
             data: {
                 roomId: selectedRoomId,
-                limit: 10,
-                time: new Date()
+                limit: amount,
+                time: time
             }
         }).then((res) => {
             //console.log('conversation is now: ', res.data);
@@ -65,9 +80,39 @@ class MessagesPanel extends Component {
             console.log(err);
         });
     }
+    reachTop = () => {
+        let time = new Date(this.state.messages[this.props.selectedRoom.roomId][0].time);
+        // let allConstants = this.allConstants;
+        // axios({
+        //     method: 'POST',
+        //     url: allConstants.getConversation,
+        //     data: {
+        //         roomId: this.props.selectedRoom.roomId,
+        //         limit: 10,
+        //         time: this.state.messages[this.props.selectedRoom.roomId][0].time
+        //     }
+        // }).then((res) => {
+        //     //console.log('conversation is now: ', res.data);
+        //     if (res.data.status) {
+        //         let newRooms = res.data.messages;
+                
+        //         let messages = this.state.messages;
+        //         for (let i in messages[this.props.selectedRoom.roomId]){
+        //             newRooms.push(messages[this.props.selectedRoom.roomId][i]);
+        //         }
+        //         messages[this.props.selectedRoom.roomId] = newRooms;
+        //         this.setState({
+        //             messages
+        //         });
+        //     }
+        // }).catch(err => {
+        //     console.log(err);
+        // });
+    }
     render() {
-        let { messages } = this.state;
-        let { userId, selectedRoom, socket } = this.props;
+        let { messages, stickers } = this.state;
+        let { userId, selectedRoom, socket} = this.props;
+        
         return (
             <div>
                 <div className="user-current" >
@@ -82,11 +127,14 @@ class MessagesPanel extends Component {
                         Messages={messages[selectedRoom.roomId]}
                         userId={userId}
                         avatar={selectedRoom.avatar}
+                        reachTop={this.reachTop}
+                        stickers={stickers}
                     />
                     <WriteMessage
                         userId={userId}
                         selectedRoomId={selectedRoom.roomId}
                         socket={socket}
+                        stickers={stickers}
                     />
                 </div>
             </div>

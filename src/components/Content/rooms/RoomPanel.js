@@ -47,13 +47,26 @@ class RoomPanel extends Component {
                 //     this.saveReadStatusToDb(room, false)
                 // }
             }
-        })
+            let check = -1;
+            for (let i in nextProps.onlineRooms){
+                console.log(i);    
+                if (nextProps.onlineRooms[i].roomId === room.roomId) {
+                    room.online = true;
+                    check = i;
+                    break;
+                }
+            }
+            if (check === -1) room.online = false;
+
+            
+        })   
         // newRooms = newRooms.sort((a, b) => {
         //     let x = a.lastMessage !== null ? a.lastMessage : { "time": "" };
         //     let y = b.lastMessage !== null ? b.lastMessage : { "time": "" };
         //     return new Date(y.time) - new Date(x.time);
 
         // });
+        console.log(newRooms);
         this.setState({ rooms: newRooms });
     }
     componentDidMount() {
@@ -66,6 +79,7 @@ class RoomPanel extends Component {
         })
     }
     loadrooms() {
+        console.log("load room");
         let allConstants = this.allConstants;
         // call the back end to get rooms
         axios({
@@ -82,7 +96,7 @@ class RoomPanel extends Component {
                 this.setState({ rooms: rooms });
                 let onlineRooms = [];
                 for (let i in rooms){
-                    if (rooms[i].online) onlineRooms.push(rooms[i]);
+                    if (rooms[i].online) onlineRooms.push(rooms[i].roomId);
                 }
                 this.props.getOnlineRooms(onlineRooms);
             }

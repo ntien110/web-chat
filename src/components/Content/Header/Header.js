@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { MdModeEdit } from 'react-icons/md';
+import {FiCamera} from 'react-icons/fi';
 import axios from 'axios';
-import {TiMessages} from 'react-icons/ti'; 
-import {FaUserFriends} from 'react-icons/fa';
+
 // components 
 import imgBg from './../../../images/bg-login.jpg';
 // Constants
@@ -203,7 +203,8 @@ class Header extends Component {
                                 <input type="text" className="form-control" placeholder="Enter password" name ="name" required value={name} onChange={this.onChange} />
                             </div>
                         }
-                        <input type="file" name="avatar" onChange = {this.onChange} />  
+                        <input type="file" id="file" name="avatar" onChange = {this.onChange} accept="image/*" /> 
+                        <label for="file" className="imgupload"><FiCamera /></label> 
                         {/* <div className="form-group">
                             <label className="title">Phone Number:</label>
                             <input type="text" className="form-control" placeholder="Enter phone" name="phone" required value="0389632456" onChange={this.onChange} />

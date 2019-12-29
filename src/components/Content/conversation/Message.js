@@ -1,28 +1,57 @@
 import React, { Component } from 'react';
 // Constants
 import imBg from './../../../images/bg-login.jpg';
-import Constants from './../../Constants'
+import Constants from './../../Constants';
+// Css
+import './Message.css';
 class Message extends Component {
     constructor(props) {
         super(props);
         // instantiate the Constants
         this.allConstants = new Constants();
     }
+    handleScroll = () => {
+        if (this.scroller && this.scroller.scrollTop < 1) {
+            this.props.reachTop();
+        }
+    }
     componentDidUpdate() {
-        console.log(window.pageYOffset);
         const message = document.getElementById("message");
-        if (message) {        
+        if (message) {
             message.scrollTo(0, message.scrollHeight);
         }
     }
     render() {
         let allConstants = this.allConstants;
-        let messages = this.props.Messages?this.props.Messages:[];
-        console.log(messages)
+        let messages = this.props.Messages ? this.props.Messages : [];
+        let { stickers } = this.props;
+        console.log(stickers);
+        console.log(messages);
         return (
-            <div className="msg_history" id="message">
+            <div
+                className="msg_history"
+                id="message"
+                ref={(scroller) => {
+                    this.scroller = scroller;
+                }}
+                onScroll={this.handleScroll}
+            >
                 {
                     messages.map((msg, index) => {
+                        let body = '';
+                        console.log("kk",msg.Type);
+                        if (msg.Type === 'Sticker') {
+                            for (let i in stickers) {
+                                if (stickers[i].id === msg.Body) {
+                                    body = stickers[i].body;
+                                    console.log("sticker");
+                                }
+                            }
+                        }
+                        else if (msg.Type === 'Text') {
+                            body = msg.Body;
+                            console.log("text");
+                        }
                         if (msg.From !== this.props.userId) {
                             return (
                                 <div className="incoming_msg" key={index} >
@@ -31,7 +60,12 @@ class Message extends Component {
                                     </div>
                                     <div className="received_msg">
                                         <div className="received_withd_msg" >
-                                            <p>{msg.Body}</p>
+                                            {
+                                                msg.Type === 'Text' ?
+                                                    <p>{body}</p>
+                                                    :
+                                                    <img src={body} className="img-circle" alt="Cinque Terre" width="100px" height="100px" />
+                                            }
                                             <span className="time_date" >{allConstants.formatDates(msg.time)}</span>
                                         </div>
                                     </div>
@@ -41,7 +75,12 @@ class Message extends Component {
                             return (
                                 <div className="outgoing_msg" key={index} >
                                     <div className="sent_msg" >
-                                        <p> {msg.Body} </p>
+                                        {
+                                            msg.Type === 'Text' ?
+                                                <p>{body}</p>
+                                                :
+                                                <img src={body} className="img-circle" alt="Cinque Terre" width="100px" height="100px" />
+                                        }
                                         <span className="time_date" >{allConstants.formatDates(msg.time)}</span>
                                     </div>
                                 </div>

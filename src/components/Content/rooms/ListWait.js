@@ -44,7 +44,7 @@ class ListWait extends Component {
                     this.props.listWait.map((friend) => {
                         return (
                             <div className="row friend" key={friend.userId} >
-                                <div className="col-sm-2"><img src={imBg} className="img-circle" alt="avatar user" width="40px" height="40px" /></div>
+                                <div className="col-sm-2"><img src={friend.avatar} className="img-circle" alt="avatar user" width="40px" height="40px" /></div>
                                 <div className="col-sm-5 friend-name" onClick={() => this.onShowFriendInfo(friend)}>{friend.name}</div>
                                 <div className="col-sm-5">
                                     <Button color="primary" onClick={() => this.onSubmitAccept(this.props.userId, friend.userId)}>Accept</Button>

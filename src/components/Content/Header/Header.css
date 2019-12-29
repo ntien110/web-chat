@@ -47,3 +47,13 @@
     border-radius: 3px;  
     padding: 3px;
 } 
+input[type="file"]{
+    display: none;
+}
+.imgupload{
+    cursor: pointer;
+    font-size: 30px;
+    position: absolute;
+    top: 60px; 
+    left:270px;
+}

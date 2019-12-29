@@ -1,7 +1,7 @@
 class Constants {
     constructor() {
         // all the URLs
-        this.link='192.168.1.49';
+        this.link='localhost';
         this.url = `http://${this.link}:3000`;
         this.login = `${this.url}/`;
         this.register = `${this.url}/register`;
@@ -13,6 +13,7 @@ class Constants {
         this.getListFriend = `${this.url}/listFriend`;
         this.getListWait = `${this.url}/listWait`;
         this.updateReadStatus = `${this.url}/updateReadStatus`;
+        this.getAllStickers = `${this.url}/getAllStickers`;
         this.webSocketServer = `http://${this.link}:3002`;
         this.search = `${this.url}/searchUser`;
 
