@@ -47,17 +47,12 @@ class RoomPanel extends Component {
                 //     this.saveReadStatusToDb(room, false)
                 // }
             }
-            let check = -1;
-            for (let i in nextProps.onlineRooms){
-                console.log(i);    
-                if (nextProps.onlineRooms[i].roomId === room.roomId) {
-                    room.online = true;
-                    check = i;
-                    break;
-                }
+            if (nextProps.onlineRooms !== this.props.onlineRooms){
+                if (room.roomId === nextProps.onlineRooms) room.online = true;
             }
-            if (check === -1) room.online = false;
-
+            if (nextProps.offlineRooms !== this.props.offlineRooms){
+                if (room.roomId === nextProps.offlineRooms) room.online = false;
+            }
             
         })   
         // newRooms = newRooms.sort((a, b) => {
@@ -94,11 +89,11 @@ class RoomPanel extends Component {
                 let rooms = data.rooms;
                 //console.log("getRooms", data.rooms);
                 this.setState({ rooms: rooms });
-                let onlineRooms = [];
-                for (let i in rooms){
-                    if (rooms[i].online) onlineRooms.push(rooms[i].roomId);
-                }
-                this.props.getOnlineRooms(onlineRooms);
+                // let onlineRooms = [];
+                // for (let i in rooms){
+                //     if (rooms[i].online) onlineRooms.push(rooms[i].roomId);
+                // }
+                // this.props.getOnlineRooms(onlineRooms);
             }
             else {
                 console.log("getRoom is failed");
@@ -132,7 +127,7 @@ class RoomPanel extends Component {
             }
         }).then(res => {
             var data = res.data;
-            console.log("data", data);
+            //console.log("data", data);
             if (data.status) {
                 this.setState({
                     friendSearch: data.friend,
@@ -141,7 +136,7 @@ class RoomPanel extends Component {
             } else {
                 alert('search failed');
             }
-            console.log(this.state.friendSearch, this.state.notFriendSearch);
+            //console.log(this.state.friendSearch, this.state.notFriendSearch);
         }).catch(err => {
             console.log(err);
         });
@@ -192,7 +187,7 @@ class RoomPanel extends Component {
                 console.log(data);
             }
         }).catch(err => {
-            console.log(err);
+            //console.log(err);
         });
         event.preventDefault();
 
@@ -230,7 +225,7 @@ class RoomPanel extends Component {
     //     })
     // }
     render() {
-        let { userId, setSelectedRoomId, socket, onlineRooms } = this.props;
+        let { userId, setSelectedRoomId, socket, onlineRooms, offlineRooms } = this.props;
         let btnLeft = 'btn-left';  
         let { from, activeRoomId, rooms, showListFriend, showMessage, listFriend, listWait, showAllFriend, notFriendSearch, friendSearch, search } = this.state;
         return (
@@ -262,7 +257,6 @@ class RoomPanel extends Component {
                                                     room={room}
                                                     userId={userId}
                                                     setSelectedRoomId={setSelectedRoomId}
-                                                    onlineRooms={onlineRooms}
                                                 />
                                             </div>
                                         )

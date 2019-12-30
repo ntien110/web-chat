@@ -19,8 +19,8 @@ class Content extends Component {
         this.socket = io(this.allConstants.webSocketServer);
         this.state = {
             //onlineRooms có dạng ["room": ["userId-1","userId-2",....]]
-            onlineRooms: null,
-            offlineRooms: null,
+            onlineRooms: '',
+            offlineRooms: '',
             socket: '',
             onNewMessageArrival: '',
             selectedRoom: '',
@@ -29,11 +29,11 @@ class Content extends Component {
             colorTheme: 'default-theme' 
         };
     }
-    getOnlineRooms = (data) => {
-        this.setState({
-            onlineRooms : data
-        })
-    }
+    // getOnlineRooms = (data) => {
+    //     this.setState({
+    //         onlineRooms : data
+    //     })
+    // }
     componentDidMount() {
         this.socket.on("welcome", (msg) => {
             this.socket.emit("userId", this.props.userId);
@@ -50,52 +50,37 @@ class Content extends Component {
             //console.log(this.state.onNewMessageArrival);
         });
         this.socket.on("iAmOnline", ({ userId, roomId }) => {
-            console.log(roomId);
-            let onlineRooms = this.state.onlineRooms;
-            // if (onlineRooms.hasOwnProperty(roomId)) {
-            //     onlineRooms[roomId].push(userId)
-            // } else {
-            //     onlineRooms[roomId] = [userId]
-            // }
-            for (let i in onlineRooms){
-                if (onlineRooms[i].roomId === roomId)  {
-                    onlineRooms[i].online=true
-                    break;
-                }
-            }
-            console.log(onlineRooms)
-            this.setState({
-                onlineRooms
-            })
-            //console.log("content.js ---49: ", userId, roomId, JSON.stringify(onlineRooms));
-        });
-        this.socket.on("iAmOffline", ({ roomId, userId }) => {
-            console.log(roomId);
-            let onlineRooms = this.state.onlineRooms;
-            // console.log("content.js ---61 pre: ",this.state.onlineRooms[roomId])
-            // console.log(onlineRooms.hasOwnProperty(roomId), roomId)
-
-            // if (onlineRooms.hasOwnProperty(roomId)) {
-            //     let room = onlineRooms[roomId]
-            //     let index = room.indexOf(userId);
-            //     // console.log("index found: ",index)
-            //     if (index !== -1) room.splice(index, 1);
-            //     onlineRooms[roomId] = room
-            //     if(onlineRooms[roomId].length === 0){
-            //         delete onlineRooms[roomId]
+            console.log(`get Online message from ${userId} at ${roomId}`);
+            // let onlineRooms = this.state.onlineRooms;
+          
+            // let check = false;
+            // for (let i in onlineRooms){
+            //     if (onlineRooms[i].roomId === roomId)  {               
+            //         check=true
+            //         break;
             //     }
             // }
-            console.log(onlineRooms, roomId)
-            for (let i in onlineRooms){
-                if (onlineRooms[i].roomId === roomId)  {
-                    onlineRooms[i].online=false
-                    break;
-                }
-            }
-            console.log(onlineRooms)
-
+            // if(check === false){
+            //     onlineRooms.push(roomId);
+            // }
+            // console.log(`modified onlineRoom after online: ${onlineRooms}`)
             this.setState({
-                onlineRooms
+                onlineRooms : roomId
+            })
+        });
+        this.socket.on("iAmOffline", ({ roomId, userId }) => {
+            console.log(`get Offline message from ${userId} at ${roomId}`);
+            // let onlineRooms = this.state.onlineRooms;
+        
+            // for (let i in onlineRooms){
+            //     if (onlineRooms[i].roomId === roomId)  {
+            //         onlineRooms.splice(i, 1);
+            //         break;
+            //     }
+            // }
+            // console.log(`modified onlineRoom after ${userId} online: ${onlineRooms}`)
+            this.setState({
+                offlineRooms: roomId
             })
             //console.log("content.js ---72 after: ", JSON.stringify(this.state.onlineRooms))
             // console.log("iAmOffline's data: ",roomId, userId)
@@ -123,7 +108,7 @@ class Content extends Component {
     } 
     render() {
         let { userId } = this.props;
-        let { selectedRoom, onNewMessageArrival, onlineRooms, showMessagePanel, switchmode, colorTheme } = this.state;
+        let { selectedRoom, onNewMessageArrival, onlineRooms, offlineRooms, showMessagePanel, switchmode, colorTheme } = this.state;
         let socket = this.socket;
 
         return (
@@ -133,13 +118,13 @@ class Content extends Component {
                     <div className="content">
                         <div className="row m-0">
                             <div className='col-sm-3 p-0 content-left'>
-                                <RoomPanel
-                                    getOnlineRooms={this.getOnlineRooms}
+                                <RoomPanel               
                                     userId={userId}
-                                    onlineRooms={onlineRooms}
                                     onNewMessageArrival={onNewMessageArrival}
                                     setSelectedRoomId={this.setSelectedRoomId}
                                     socket={socket}
+                                    onlineRooms={onlineRooms}
+                                    offlineRooms={offlineRooms}
                                 />
                             </div>
                             

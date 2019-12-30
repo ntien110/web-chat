@@ -77,7 +77,7 @@ class Header extends Component {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-            console.log(reader.result);
+            //console.log(reader.result);
             this.setState({
                 avatar: reader.result
             })
@@ -122,7 +122,7 @@ class Header extends Component {
         }).then(res => {
             var data = res.data;
             if (data.status) {
-                console.log(data.avatar);
+                //console.log(data.avatar);
                 this.setState({
                     name: data.name,
                     avatar: data.avatar

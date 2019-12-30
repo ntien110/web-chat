@@ -31,6 +31,7 @@ class MessagesPanel extends Component {
                 this.setState({
                     stickers: data.stickers['QooBee']
                 });
+                console.log("stickers: ",this.state.stickers);
             }
         }).catch(err => {
             console.log(err);
@@ -122,7 +123,7 @@ class MessagesPanel extends Component {
                         <img src={selectedRoom.avatar} className="img-circle" alt="Cinque Terre" width="40px" height="40px" />
                     </div>
                     <div className="user-name"> {selectedRoom.name} </div>
-                    <div className="user-status"></div>
+                    {/* <div className="user-status"></div> */}
                 </div>
                 <div className="mesgs">
                     <Message
