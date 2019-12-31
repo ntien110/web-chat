@@ -105,7 +105,6 @@ class WriteMessage extends Component {
     render() {
         let { showSticker } = this.state;
         let { stickers } = this.props;
-        console.log(stickers);
         return (
             <div className="type_msg">
                 <div className="row">

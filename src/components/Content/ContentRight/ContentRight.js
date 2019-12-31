@@ -42,6 +42,7 @@ class ContentRight extends Component {
     }
     render() {
         let {selectedRoom} = this.props;
+        //console.log(this.state.themes);
         return (
             <div>
                 <div className="user-info text-center">
@@ -52,9 +53,9 @@ class ContentRight extends Component {
                 </div>
                 <div className="user-option">
                     <div className="change-theme" onClick={() => this.setState({showColorTheme: true})}>
-                        <div class="row">
-                            <div class="col-sm-10">Change Theme</div>
-                            <div class="col-sm-2" className="icon-changetheme"><IoMdColorPalette /></div>
+                        <div className="row">
+                            <div className="col-sm-10">Change Theme</div>
+                            <div className="col-sm-2 icon-changetheme"><IoMdColorPalette /></div>
                         </div>
                     </div>
                 </div>
@@ -62,9 +63,9 @@ class ContentRight extends Component {
                     <ModalHeader>Color</ModalHeader>
                     <ModalBody>
                         {
-                            this.state.themes.map((theme) => {
+                            this.state.themes.map((theme, index) => {
                                 return(
-                                    <div className="circle" style={{backgroundColor: `${theme.color}`}} onClick={() =>{this.setState({showColorTheme: false});this.props.onChangeColor(theme.body)}}></div>
+                                    <div key={index} className="circle" style={{backgroundColor: `${theme.color}`}} onClick={() =>{this.setState({showColorTheme: false});this.props.onChangeColor(theme.body)}}></div>
                                 )
                             })
                         }

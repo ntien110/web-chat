@@ -26,7 +26,7 @@ class Message extends Component {
         let messages = this.props.Messages ? this.props.Messages : [];
         let { stickers, colorTheme} = this.props;
         //console.log(stickers);
-        console.log(messages);
+        console.log("messages:", messages);
         return (
             <div
                 className="msg_history"
@@ -39,6 +39,15 @@ class Message extends Component {
                 {
                     messages.map((msg, index) => {
                         let body = '';
+                        let read = false;
+                        if (msg.From === this.props.userId){
+                            for (let i in msg.seen){
+                                if (msg.seen[i] !== this.props.userId){
+                                    read = true;
+                                    break;
+                                }
+                            }
+                        }
                         //console.log("kk",msg.Type);
                         if (msg.Type === 'Sticker') {
                             for (let i in stickers) {
@@ -84,7 +93,17 @@ class Message extends Component {
                                                 :
                                                 <img src={body} alt="Cinque Terre" width="100px" height="100px" />
                                         }
-                                        <span className="time_date" >{allConstants.formatDates(msg.time)}</span>
+                                        <span className="time_date" >
+                                            {allConstants.formatDates(msg.time)}
+                                            {
+                                                read ?
+                                                    <div style={{'float':'right'}}>
+                                                        <img src={this.props.avatar} className="img-circle" alt="Cinque Terre" width="10px" height="10px" />
+                                                    </div>
+                                                :
+                                                    ''
+                                            }
+                                        </span>
                                     </div>
                                 </div>
                             );

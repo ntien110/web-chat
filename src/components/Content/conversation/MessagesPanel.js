@@ -21,6 +21,19 @@ class MessagesPanel extends Component {
         this.allConstants = new Constants();
     }
     componentDidMount() {
+        this.props.socket.on("seen", ({ userId, messageId, roomId }) => {
+            console.log(`get Seen message from ${userId} at ${roomId}`);
+            let messages = this.state.messages;
+            for (let i in messages[roomId]){
+                if (messages[roomId][i]._id === messageId){
+                    messages[roomId][i].seen.push(userId);
+                }
+            }
+            this.setState({
+                messages
+            })
+
+        });
         let allConstants = this.allConstants;
         axios({
             method: 'POST',
@@ -31,7 +44,7 @@ class MessagesPanel extends Component {
                 this.setState({
                     stickers: data.stickers['QooBee']
                 });
-                console.log("stickers: ",this.state.stickers);
+                //console.log("stickers: ",this.state.stickers);
             }
         }).catch(err => {
             console.log(err);
@@ -50,7 +63,7 @@ class MessagesPanel extends Component {
         else {
             if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoom.roomId && nextProps.switchmode === this.props.switchmode && nextProps.colorTheme === this.props.colorTheme) {
                 let messages = this.state.messages;
-                console.log("o day");
+                //console.log("o day");
                 messages[this.props.selectedRoom.roomId].push(nextProps.onNewMessageArrival);
                 this.setState({ messages });
             }
@@ -84,7 +97,7 @@ class MessagesPanel extends Component {
         });
     }
     reachTop = () => {
-        let time = new Date(this.state.messages[this.props.selectedRoom.roomId][0].time);
+        //let time = new Date(this.state.messages[this.props.selectedRoom.roomId][0].time);
         // let allConstants = this.allConstants;
         // axios({
         //     method: 'POST',
@@ -115,7 +128,7 @@ class MessagesPanel extends Component {
     render() {
         let { messages, stickers } = this.state;
         let { userId, selectedRoom, socket, colorTheme} = this.props;
-        
+        //console.log(messages);
         return (
             <div>
                 <div className="user-current" >

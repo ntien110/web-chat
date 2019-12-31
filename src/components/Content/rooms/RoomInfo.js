@@ -12,7 +12,7 @@ class RoomInfo extends Component {
     render() {
         let allConstants = this.allConstants;
         let { room } = this.props;
-        let userStatus = '';
+        //console.log(room.lastMessage);
         let lastMessage = room.lastMessage !== null ? room.lastMessage : { "Body": "", "time": "" };
         let time =  allConstants.formatDates(lastMessage.time);
         return (
