@@ -35,10 +35,13 @@ class RoomPanel extends Component {
         let newRooms = [...this.state.rooms];
         newRooms.forEach((room) => {
             if (room.roomId === nextProps.onNewMessageArrival.roomId) {
-                let lastMessage = room.lastMessage !== null ? room.lastMessage : { "Body": "", "time": "" };
+                let lastMessage = room.lastMessage !== null ? room.lastMessage : { "Body": "", "time": "", "_id":"","From":"","Type":"" };
                 // adjust the necessary field if the roomId matches
                 lastMessage.Body = nextProps.onNewMessageArrival.Body;
                 lastMessage.time = nextProps.onNewMessageArrival.time;
+                lastMessage._id = nextProps.onNewMessageArrival.messageId;
+                lastMessage.From = nextProps.onNewMessageArrival.From;
+                lastMessage.Type = nextProps.onNewMessageArrival.Type;
                 // lastMessage.senderId = nextProps.onNewMessageArrival.senderId;
 
                 // if the message is from other non active room
@@ -228,22 +231,24 @@ class RoomPanel extends Component {
             if (rooms[i].roomId === id){
                 let lastMessage = rooms[i].lastMessage !== null ? rooms[i].lastMessage : { "Body": "", "time": "" };
                 msg = lastMessage._id;
+                
                 break;
             }
         }
-        
+        //console.log("data1: ",);
         let data = {
             userId : this.props.userId,
             roomId: id,
             messageId: msg
         }
-        console.log("data1: ",data);
+        
         this.props.socket.emit("seen", data);
     }
     render() {
         let { userId, setSelectedRoomId, socket, onlineRooms } = this.props;
         let btnLeft = 'btn-left';  
         let { from, activeRoomId, rooms, showListFriend, showMessage, listFriend, listWait, showAllFriend, notFriendSearch, friendSearch, search } = this.state;
+        console.log("lastMessage1: ",rooms);
         return (
             <div className="inbox_chat">
                 <div className="search-box-wrapper">

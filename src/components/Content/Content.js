@@ -38,7 +38,7 @@ class Content extends Component {
             this.socket.emit("userId", this.props.userId);
         });
         this.socket.on("message", (data) => {
-            //console.log('data value ', data);
+            
             //let status = true;
             //send the newly incoming message to the parent component 
             //console.log(this.state.selectedRoom)
@@ -50,7 +50,9 @@ class Content extends Component {
                     messageId: data.messageId
                 }
                 this.socket.emit("seen", seenInfo);
+                data.seen.push(this.props.userId);
             }
+            console.log('data value ', data);   
             this.setState({
                 onNewMessageArrival: data
             });
