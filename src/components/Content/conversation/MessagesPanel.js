@@ -50,14 +50,14 @@ class MessagesPanel extends Component {
             console.log(err);
         });
         if (this.props.selectedRoom.roomId !== '')
-            this.loadConversation(this.props.selectedRoom.roomId, 10, new Date());
+            this.loadConversation(this.props.selectedRoom.roomId, 100, new Date());
     }
     componentWillReceiveProps(nextProps) {
         
         if (this.props.selectedRoom.roomId !== nextProps.selectedRoom.roomId) {
             console.log("change roomId", nextProps.selectedRoom.roomId);
             if (!this.state.messages[nextProps.selectedRoom.roomId]) {
-                this.loadConversation(nextProps.selectedRoom.roomId, 10, new Date());
+                this.loadConversation(nextProps.selectedRoom.roomId, 100, new Date());
             }
         }
         else {
