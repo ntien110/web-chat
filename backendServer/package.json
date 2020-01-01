@@ -15,6 +15,6 @@
     "body-parser": "*",
     "cors": "*",
     "express-session": "*",
-    "socket.io":"*"
+    "socket.io": "*"
   }
 }

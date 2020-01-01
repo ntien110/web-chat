@@ -69,7 +69,7 @@ router.route('/getMessage')
         var time = new Date(req.body.time);
         var limit = req.body.limit;
         var roomId = req.body.roomId;
-        console.log(time, limit, roomId)
+        //console.log(time, limit, roomId)
         Room.GetMessengerInRoom(roomId, function (err, messages) {
             if (err || messages == null) {
                 res.json({
@@ -100,7 +100,7 @@ router.route('/getMessage')
                     var data = [];
                     var length = messages.length - 1;
                     while (limit > 0) {
-                        console.log(messages.length, length,limit, typeof messages[length].time,typeof time)
+                        //console.log(messages.length, length,limit, typeof messages[length].time,typeof time)
                         if (messages[length].time <= time) {
                             data.push(messages[length]);
                             limit--;

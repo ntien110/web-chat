@@ -96,7 +96,7 @@ var GetMessengerInRoom = function(roomID, done){
 }
 
 var SetRoomStatus = function(roomID, status, done){
-    console.log(`Room 91,set room ${roomID} to ${status}`)
+    //console.log(`Room 91,set room ${roomID} to ${status}`)
     Room.updateOne({_id: roomID}, {
          
             'online': status
@@ -174,10 +174,10 @@ const changeMemberOnlineStatus=function(roomId, userId, online,callback){
 const markAsSeen=function(roomId, messageId, userId, callback){
     Room.findById(roomId,(err1, room)=>{
         if(err1) {
-            console.log("Error when findById at markAsSeen: ", err)
+            //console.log("Error when findById at markAsSeen: ", err)
             callback(err1, room)
         }else if(room==null){
-            console.log(`Room with Id ${roomId} is not found at markAsSeen`)
+            //console.log(`Room with Id ${roomId} is not found at markAsSeen`)
             callback(`Room with Id ${roomId} is not found at markAsSeen (callback)`, room)
         }else {
             let messages=room.messages
@@ -190,6 +190,7 @@ const markAsSeen=function(roomId, messageId, userId, callback){
                             {$set:{'messages.$.seen':[...messages[i].seen,ObjectId(userId)]}},
                             callback
                         )
+                        break
                     }else{
                         callback(`Error User ${userId} have seen message ${messageId}`, room)
                     }

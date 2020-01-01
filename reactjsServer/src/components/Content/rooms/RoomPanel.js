@@ -35,10 +35,13 @@ class RoomPanel extends Component {
         let newRooms = [...this.state.rooms];
         newRooms.forEach((room) => {
             if (room.roomId === nextProps.onNewMessageArrival.roomId) {
-                let lastMessage = room.lastMessage !== null ? room.lastMessage : { "Body": "", "time": "" };
+                let lastMessage = room.lastMessage !== null ? room.lastMessage : { "Body": "", "time": "", "_id":"","From":"","Type":"" };
                 // adjust the necessary field if the roomId matches
                 lastMessage.Body = nextProps.onNewMessageArrival.Body;
                 lastMessage.time = nextProps.onNewMessageArrival.time;
+                lastMessage._id = nextProps.onNewMessageArrival.messageId;
+                lastMessage.From = nextProps.onNewMessageArrival.From;
+                lastMessage.Type = nextProps.onNewMessageArrival.Type;
                 // lastMessage.senderId = nextProps.onNewMessageArrival.senderId;
 
                 // if the message is from other non active room
@@ -115,10 +118,11 @@ class RoomPanel extends Component {
 
     setSelectedRoomId = (room) => {
         // pass the selected room id augmented with logged in userid to the parent 
+        this.changeReadStatus(room.roomId);
         this.props.setSelectedRoomId(room);
         // set active room id for highlighting purpose
         this.setState({ activeRoomId: room.roomId });
-        this.changeReadStatus(room.roomId);
+        
 
     }
     onChange = (event) => {
@@ -138,7 +142,7 @@ class RoomPanel extends Component {
             }
         }).then(res => {
             var data = res.data;
-            //console.log("data", data);
+            console.log("data " , data);
             if (data.status) {
                 this.setState({
                     friendSearch: data.friend,
@@ -165,6 +169,7 @@ class RoomPanel extends Component {
                 userId: this.props.userId
             }
         }).then(res => {
+            console.log("listFriend: ", res.data)
             var data = res.data;
             if (data.status) {
                 this.setState({
@@ -219,25 +224,32 @@ class RoomPanel extends Component {
     }
     //function to change the room status from read / unread
     changeReadStatus(id) {
+        //console.log("gfd");
         let rooms = this.state.rooms;
-        let message = ''
+        let msg = '';
+        
         for (let i in rooms){
             if (rooms[i].roomId === id){
-                message = rooms[i].lastMessage._id;
+                let lastMessage = rooms[i].lastMessage !== null ? rooms[i].lastMessage : { "Body": "", "time": "" };
+                msg = lastMessage._id;
+                
                 break;
             }
         }
+        //console.log("data1: ",);
         let data = {
             userId : this.props.userId,
             roomId: id,
-            messageId: message
+            messageId: msg
         }
-        this.props.socket.emit('seen', data);
+        
+        this.props.socket.emit("seen", data);
     }
     render() {
         let { userId, setSelectedRoomId, socket, onlineRooms } = this.props;
         let btnLeft = 'btn-left';  
         let { from, activeRoomId, rooms, showListFriend, showMessage, listFriend, listWait, showAllFriend, notFriendSearch, friendSearch, search } = this.state;
+        console.log("lastMessage1: ",rooms);
         return (
             <div className="inbox_chat">
                 <div className="search-box-wrapper">
