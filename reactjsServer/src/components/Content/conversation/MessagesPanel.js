@@ -97,37 +97,6 @@ class MessagesPanel extends Component {
             console.log(err);
         });
     }
-    reachTop = () => {
-        console.log("reach top");
-        //let time = new Date(this.state.messages[this.props.selectedRoom.roomId][0].time);
-        let allConstants = this.allConstants;
-        axios({
-            method: 'POST',
-            url: allConstants.getConversation,
-            data: {
-                roomId: this.props.selectedRoom.roomId,
-                limit: 10,
-                time: this.state.messages[this.props.selectedRoom.roomId][0].time
-            }
-        }).then((res) => {
-            //console.log('conversation is now: ', res.data);
-            if (res.data.status) {
-                let newRooms = res.data.messages;
-                
-                let messages = this.state.messages;
-                for (let i in messages[this.props.selectedRoom.roomId]){
-                    newRooms.push(messages[this.props.selectedRoom.roomId][i]);
-                }
-                messages[this.props.selectedRoom.roomId] = newRooms;
-                console.log(newRooms);
-                this.setState({
-                    messages
-                });
-            }
-        }).catch(err => {
-            console.log(err);
-        });
-    }
     render() {
         let { messages, stickers } = this.state;
         let { userId, selectedRoom, socket, colorTheme} = this.props;
@@ -146,7 +115,6 @@ class MessagesPanel extends Component {
                         Messages={messages[selectedRoom.roomId]}
                         userId={userId}
                         avatar={selectedRoom.avatar}
-                        reachTop={this.reachTop}
                         stickers={stickers}
                         colorTheme={colorTheme}
                     />
