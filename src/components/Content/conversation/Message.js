@@ -26,7 +26,7 @@ class Message extends Component {
         let messages = this.props.Messages ? this.props.Messages : [];
         let { stickers, colorTheme} = this.props;
         //console.log(stickers);
-        console.log("messages:", messages);
+        //console.log("messages:", messages);
         return (
             <div
                 className="msg_history"

@@ -38,8 +38,8 @@ class Content extends Component {
             this.socket.emit("userId", this.props.userId);
         });
         this.socket.on("message", (data) => {
-            console.log('data value ', data);
-            // let status = true;
+            //console.log('data value ', data);
+            //let status = true;
             //send the newly incoming message to the parent component 
             //console.log(this.state.selectedRoom)
             if (data.roomId === this.state.selectedRoom.roomId){

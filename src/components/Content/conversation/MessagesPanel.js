@@ -22,17 +22,17 @@ class MessagesPanel extends Component {
     }
     componentDidMount() {
         this.props.socket.on("seen", ({ userId, messageId, roomId }) => {
-            console.log(`get Seen message from ${userId} at ${roomId}`);
+            console.log(`get Seen message from ${userId} at ${roomId} && ${messageId}`);
             let messages = this.state.messages;
             for (let i in messages[roomId]){
-                if (messages[roomId][i]._id === messageId){
+                if (messages[roomId][i].messageId === messageId){
                     messages[roomId][i].seen.push(userId);
                 }
             }
+            console.log("messages:", messages);
             this.setState({
                 messages
             })
-
         });
         let allConstants = this.allConstants;
         axios({
@@ -61,10 +61,10 @@ class MessagesPanel extends Component {
             }
         }
         else {
-            if (nextProps.onNewMessageArrival.roomId === this.props.selectedRoom.roomId && nextProps.switchmode === this.props.switchmode && nextProps.colorTheme === this.props.colorTheme) {
+            if (nextProps.switchmode === this.props.switchmode && nextProps.colorTheme === this.props.colorTheme) {
                 let messages = this.state.messages;
                 //console.log("o day");
-                messages[this.props.selectedRoom.roomId].push(nextProps.onNewMessageArrival);
+                messages[nextProps.onNewMessageArrival.roomId].push(nextProps.onNewMessageArrival);
                 this.setState({ messages });
             }
         }
@@ -88,6 +88,7 @@ class MessagesPanel extends Component {
                 let newRooms = res.data.messages;
                 let messages = this.state.messages;
                 messages[selectedRoomId] = newRooms;
+                //console.log(messages);
                 this.setState({
                     messages
                 });
@@ -128,7 +129,7 @@ class MessagesPanel extends Component {
     render() {
         let { messages, stickers } = this.state;
         let { userId, selectedRoom, socket, colorTheme} = this.props;
-        //console.log(messages);
+        console.log(messages);
         return (
             <div>
                 <div className="user-current" >

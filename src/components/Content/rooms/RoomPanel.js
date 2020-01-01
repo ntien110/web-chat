@@ -115,10 +115,11 @@ class RoomPanel extends Component {
 
     setSelectedRoomId = (room) => {
         // pass the selected room id augmented with logged in userid to the parent 
+        this.changeReadStatus(room.roomId);
         this.props.setSelectedRoomId(room);
         // set active room id for highlighting purpose
         this.setState({ activeRoomId: room.roomId });
-        this.changeReadStatus(room.roomId);
+        
 
     }
     onChange = (event) => {
@@ -219,20 +220,25 @@ class RoomPanel extends Component {
     }
     //function to change the room status from read / unread
     changeReadStatus(id) {
+        //console.log("gfd");
         let rooms = this.state.rooms;
-        let message = ''
+        let msg = '';
+        
         for (let i in rooms){
             if (rooms[i].roomId === id){
-                message = rooms[i].lastMessage._id;
+                let lastMessage = rooms[i].lastMessage !== null ? rooms[i].lastMessage : { "Body": "", "time": "" };
+                msg = lastMessage._id;
                 break;
             }
         }
+        
         let data = {
             userId : this.props.userId,
             roomId: id,
-            messageId: message
+            messageId: msg
         }
-        this.props.socket.emit('seen', data);
+        console.log("data1: ",data);
+        this.props.socket.emit("seen", data);
     }
     render() {
         let { userId, setSelectedRoomId, socket, onlineRooms } = this.props;
