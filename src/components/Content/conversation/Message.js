@@ -10,11 +10,13 @@ class Message extends Component {
         // instantiate the Constants
         this.allConstants = new Constants();
     }
-    handleScroll = () => {
-        if (this.scroller && this.scroller.scrollTop < 1) {
-            this.props.reachTop();
-        }
-    }
+    // handleScroll = () => {
+    //     if (this.scroller && this.scroller.scrollTop < 1) {
+    //         this.props.reachTop();
+    //         const message = document.getElementById("message");
+    //         this.scroller.scrollTop =  message.scrollHeight;
+    //     }
+    // }
     componentDidUpdate() {
         const message = document.getElementById("message");
         if (message) {

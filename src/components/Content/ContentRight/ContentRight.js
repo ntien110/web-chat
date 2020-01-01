@@ -37,7 +37,7 @@ class ContentRight extends Component {
     }
     onCloseColor = () =>{
         this.setState({
-            showColorTheme: true
+            showColorTheme: false
         })
     }
     render() {
@@ -56,6 +56,12 @@ class ContentRight extends Component {
                         <div className="row">
                             <div className="col-sm-10">Change Theme</div>
                             <div className="col-sm-2 icon-changetheme"><IoMdColorPalette /></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="row">
+                            <div className="col-sm-10">Amount Message</div>
+                            <div className="col-sm-2 icon-changetheme">{this.props.amountMsg}</div>
                         </div>
                     </div>
                 </div>

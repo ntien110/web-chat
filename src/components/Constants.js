@@ -18,14 +18,26 @@ class Constants {
         this.search = `${this.url}/searchUser`;
 
         // initialize
+        
         this.theWeek = makeFormattedWeek();
         this.formatDates = (dateReceived) => {
-            if (this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]) {
-                let formattedDate = this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]
-                return (formattedDate === 'Today') ? dateReceived.substr(dateReceived.indexOf('T') + 1, 5) : formattedDate
-            } else {
-                return `${new Date(dateReceived).getDate()}/${new Date(dateReceived).getMonth() + 1}/${new Date(dateReceived).getFullYear()}`
-            }
+            let date = (new Date(dateReceived)).toString();
+            //let day = dateReceived.slice(0, 3);
+            //let month = dateReceived.slice(4, 3);
+            //let date = dateReceived.slice(8, 2);
+            //let year = dateReceived.slice(11, 4);
+            let today = date.slice(4, 15);
+            let time = date.slice(16, 5);
+            let datetime = date.slice(4, 21);
+
+            return datetime;
+            //}
+            // if (this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]) {
+            //     let formattedDate = this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]
+            //     return (formattedDate === 'Today') ? dateReceived.substr(dateReceived.indexOf('T') + 1, 5) : formattedDate
+            // } else {
+            //return `${day}/${new Date(dateReceived).getMonth() + 1}/${new Date(dateReceived).getFullYear()}`
+            // }
         }
     }
 }
