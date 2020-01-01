@@ -1,3 +1,5 @@
 .idea
 backendServer/node_modules
+backendServer/.git
 reactjsServer/node_modules
+reactjsServer/.git

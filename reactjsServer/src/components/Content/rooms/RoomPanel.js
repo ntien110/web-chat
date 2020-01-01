@@ -42,6 +42,7 @@ class RoomPanel extends Component {
                 lastMessage._id = nextProps.onNewMessageArrival.messageId;
                 lastMessage.From = nextProps.onNewMessageArrival.From;
                 lastMessage.Type = nextProps.onNewMessageArrival.Type;
+
                 // lastMessage.senderId = nextProps.onNewMessageArrival.senderId;
 
                 // if the message is from other non active room
@@ -56,6 +57,9 @@ class RoomPanel extends Component {
         let rooms = this.state.rooms;
         //console.log(this.props.onlineRooms);
         for (let i in rooms ){
+            if (rooms[i].roomId === nextProps.onNewMessageArrival.roomId && nextProps.onNewMessageArrival !== this.props.onNewMessageArrival){
+                rooms[i].messageCount ++;
+            }
             let j = this.props.onlineRooms.indexOf(rooms[i].roomId);
             if (j >= 0) {
                 //console.log("online");
@@ -142,7 +146,7 @@ class RoomPanel extends Component {
             }
         }).then(res => {
             var data = res.data;
-            console.log("data " , data);
+            //console.log("data", data);
             if (data.status) {
                 this.setState({
                     friendSearch: data.friend,
@@ -169,7 +173,6 @@ class RoomPanel extends Component {
                 userId: this.props.userId
             }
         }).then(res => {
-            console.log("listFriend: ", res.data)
             var data = res.data;
             if (data.status) {
                 this.setState({

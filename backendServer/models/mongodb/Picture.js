@@ -97,6 +97,8 @@ var GetAllAvatar = function(done){
     })
 }
 
+GetPictureByID('5e0c745458b2c725d497eb41',(err, data)=>{console.log(err,data)})
+
 // insert("Sticker", "","QooBee",(err, data)=>{console.log(err, data)})
 
 module.exports = {

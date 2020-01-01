@@ -61,7 +61,7 @@ class MessagesPanel extends Component {
             }
         }
         else {
-            if (nextProps.switchmode === this.props.switchmode && nextProps.colorTheme === this.props.colorTheme) {
+            if (nextProps.onNewMessageArrival !== this.props.onNewMessageArrival && nextProps.switchmode === this.props.switchmode && nextProps.colorTheme === this.props.colorTheme) {
                 let messages = this.state.messages;
                 //console.log("o day");
                 messages[nextProps.onNewMessageArrival.roomId].push(nextProps.onNewMessageArrival);
@@ -98,33 +98,35 @@ class MessagesPanel extends Component {
         });
     }
     reachTop = () => {
+        console.log("reach top");
         //let time = new Date(this.state.messages[this.props.selectedRoom.roomId][0].time);
-        // let allConstants = this.allConstants;
-        // axios({
-        //     method: 'POST',
-        //     url: allConstants.getConversation,
-        //     data: {
-        //         roomId: this.props.selectedRoom.roomId,
-        //         limit: 10,
-        //         time: this.state.messages[this.props.selectedRoom.roomId][0].time
-        //     }
-        // }).then((res) => {
-        //     //console.log('conversation is now: ', res.data);
-        //     if (res.data.status) {
-        //         let newRooms = res.data.messages;
+        let allConstants = this.allConstants;
+        axios({
+            method: 'POST',
+            url: allConstants.getConversation,
+            data: {
+                roomId: this.props.selectedRoom.roomId,
+                limit: 10,
+                time: this.state.messages[this.props.selectedRoom.roomId][0].time
+            }
+        }).then((res) => {
+            //console.log('conversation is now: ', res.data);
+            if (res.data.status) {
+                let newRooms = res.data.messages;
                 
-        //         let messages = this.state.messages;
-        //         for (let i in messages[this.props.selectedRoom.roomId]){
-        //             newRooms.push(messages[this.props.selectedRoom.roomId][i]);
-        //         }
-        //         messages[this.props.selectedRoom.roomId] = newRooms;
-        //         this.setState({
-        //             messages
-        //         });
-        //     }
-        // }).catch(err => {
-        //     console.log(err);
-        // });
+                let messages = this.state.messages;
+                for (let i in messages[this.props.selectedRoom.roomId]){
+                    newRooms.push(messages[this.props.selectedRoom.roomId][i]);
+                }
+                messages[this.props.selectedRoom.roomId] = newRooms;
+                console.log(newRooms);
+                this.setState({
+                    messages
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
     }
     render() {
         let { messages, stickers } = this.state;

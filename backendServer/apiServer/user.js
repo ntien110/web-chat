@@ -1,17 +1,17 @@
 const express = require("express"),
     router = express.Router()
-const session = require('express-session');
+//const session = require('express-session');
 
 const User = require('../models/mongodb/User');
 const Room = require('../models/mongodb/Room');
 const Picture = require('../models/mongodb/Picture');
 
-router.use(session({
-    resave: true,
-    saveUninitialized: true,
-    secret: 'somesecret',
-    cookie: { maxAge: 60000 }
-}));
+// router.use(session({
+//     resave: true,
+//     saveUninitialized: true,
+//     secret: 'somesecret',
+//     cookie: { maxAge: 60000 }
+// }));
 
 
 router.route('/')
@@ -25,7 +25,7 @@ router.route('/')
                     'status': false
                 })
             } else {
-                req.session.userId = result;
+                //req.session.userId = result;
                 res.json({
                     'status': true,
                     'userId': result
@@ -256,7 +256,7 @@ router.route('/isFriends')
                     'status': 'Error'
                 })
             } else {
-                console.log(friendList)
+                //console.log(friendList)
                 res.json({
                     'status': friendList
                 })
@@ -267,7 +267,7 @@ router.route('/searchUser')
     .post((req, res) => {
         let name = req.body.name;
         let thisUserId = req.body.userId;
-        console.log("name: ", name, "userIs: ", thisUserId)
+        //console.log("name: ", name, "userIs: ", thisUserId)
         // let name = '';
         // let thisUserId = '5dcc0e22dee9df188728edb2';
         User.FindUserByName(name, function (err1, data) {
@@ -417,19 +417,19 @@ router.route('/editUser')
             }
         })
     })
-router.post('/checkUser', (req, res) => {
-    if (req.session.userID) {
-        return res.status(200).json({ status: true })
-    }
-    return res.status(200).json({ status: false })
-})
+// router.post('/checkUser', (req, res) => {
+//     if (req.session.userID) {
+//         return res.status(200).json({ status: true })
+//     }
+//     return res.status(200).json({ status: false })
+// })
 
 
-router.post('/logout', (req, res) => {
-    req.session.destroy(function (err) {
-        return res.status(200).json({ status: true })
-    })
-})
+// router.post('/logout', (req, res) => {
+//     req.session.destroy(function (err) {
+//         return res.status(200).json({ status: true })
+//     })
+// })
 
 
 

@@ -8,6 +8,7 @@
 }
 .change-theme{
     cursor: pointer;
+    margin-bottom: 10px;
 }
 .circle{
     width: 40px;

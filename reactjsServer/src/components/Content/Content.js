@@ -25,7 +25,8 @@ class Content extends Component {
             selectedRoom: '',
             showMessagePanel: false,
             switchmode: '',
-            colorTheme: 'default-theme'
+            colorTheme: 'default-theme',
+            amountMsg: ''
         };
     }
     getOnlineRooms = (data) => {
@@ -51,6 +52,7 @@ class Content extends Component {
                 }
                 this.socket.emit("seen", seenInfo);
                 data.seen.push(this.props.userId);
+                this.setState({amountMsg : this.state.amountMsg + 1})
             }
             console.log('data value ', data);   
             this.setState({
@@ -101,13 +103,14 @@ class Content extends Component {
         // })
     }
     setSelectedRoomId = (room) => {
-        console.log('id here in content: ', room.roomId);
+        console.log('room here in content: ', room);
         if (room.roomId !== this.state.selectedRoom.roomId) {
             this.setState({
                 selectedRoom: room,
                 showMessagePanel: true
             });
         }
+        this.setState({amountMsg : room.messageCount})
     }
     onSwitchMode = (value) => {
         this.setState({
@@ -121,7 +124,7 @@ class Content extends Component {
     }
     render() {
         let { userId } = this.props;
-        let { selectedRoom, onNewMessageArrival, onlineRooms, showMessagePanel, switchmode, colorTheme } = this.state;
+        let { selectedRoom, onNewMessageArrival, onlineRooms, showMessagePanel, switchmode, colorTheme, amountMsg } = this.state;
         let socket = this.socket;
 
         return (
@@ -155,7 +158,7 @@ class Content extends Component {
                                             />
                                         </div>
                                         <div className='col-sm-4 p-0 content-right'>
-                                            <ContentRight selectedRoom={selectedRoom} onChangeColor={this.onChangeColor} />
+                                            <ContentRight amountMsg={amountMsg} selectedRoom={selectedRoom} onChangeColor={this.onChangeColor} />
                                         </div>
                                     </div>
                                 </div>

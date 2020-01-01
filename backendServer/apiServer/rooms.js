@@ -22,11 +22,11 @@ router.route('/rooms')
                             //console.log("1: ",data[i].members[j].userId)
                             User.GetInfoUser(data[i].members[j].userId, (err, user) => {
                                 //console.log("err1: ",err, user)
-                                //console.log("\n\n\n26: ",data, user,userId)
+                                //console.log(user.avatar,i)
                                 Picture.GetPictureByID(user.avatar, (err2, pic) => {
                                     data[i]["name"] = user.name
                                     data[i].avatar = pic==null?"default pic":pic.body
-                                    //console.log(data[i].name, data[i].avatar)
+                                    //console.log(data[i].avatar[data[i].avatar.length-1],err2, pic._id,i)
                                     
                                     if (i == data.length - 1) {
                                         //console.log(data)
@@ -39,7 +39,8 @@ router.route('/rooms')
                                                     "name": room.name,
                                                     "members": room.members,
                                                     "lastMessage": room.messages.length > 0 ? room.messages.reduce((nearestMessage, cur) => cur.time > nearestMessage.time ? cur : nearestMessage) : null,
-                                                    "online": room.online
+                                                    "online": room.online,
+                                                    "messageCount": room.messages.length
                                                 }
                                             })
                                         })

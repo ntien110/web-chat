@@ -1,8 +1,14 @@
 class Constants {
     constructor() {
         // all the URLs
-        this.link='192.168.133.109';
-        this.url = `http://${this.link}:3000`;
+        //this.link='blooming-cove-97725.herokuapp.com';
+        // this.url = `https://${this.link}`;
+        
+        this.link='localhost';
+        this.url = `https://${this.link}:3001`;
+
+
+        this.webSocketServer = this.url;
         this.login = `${this.url}/`;
         this.register = `${this.url}/register`;
         this.getUser = `${this.url}/getUser`;
@@ -14,18 +20,30 @@ class Constants {
         this.getListWait = `${this.url}/listWait`;
         this.updateReadStatus = `${this.url}/updateReadStatus`;
         this.getAllStickers = `${this.url}/getAllStickers`;
-        this.webSocketServer = `http://${this.link}:3002`;
+        
         this.search = `${this.url}/searchUser`;
 
         // initialize
+        
         this.theWeek = makeFormattedWeek();
         this.formatDates = (dateReceived) => {
-            if (this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]) {
-                let formattedDate = this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]
-                return (formattedDate === 'Today') ? dateReceived.substr(dateReceived.indexOf('T') + 1, 5) : formattedDate
-            } else {
-                return `${new Date(dateReceived).getDate()}/${new Date(dateReceived).getMonth() + 1}/${new Date(dateReceived).getFullYear()}`
-            }
+            let date = (new Date(dateReceived)).toString();
+            //let day = dateReceived.slice(0, 3);
+            //let month = dateReceived.slice(4, 3);
+            //let date = dateReceived.slice(8, 2);
+            //let year = dateReceived.slice(11, 4);
+            let today = date.slice(4, 15);
+            let time = date.slice(16, 5);
+            let datetime = date.slice(4, 21);
+
+            return datetime;
+            //}
+            // if (this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]) {
+            //     let formattedDate = this.theWeek[dateReceived.substring(0, dateReceived.indexOf('T'))]
+            //     return (formattedDate === 'Today') ? dateReceived.substr(dateReceived.indexOf('T') + 1, 5) : formattedDate
+            // } else {
+            //return `${day}/${new Date(dateReceived).getMonth() + 1}/${new Date(dateReceived).getFullYear()}`
+            // }
         }
     }
 }
