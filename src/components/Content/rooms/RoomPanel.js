@@ -252,7 +252,7 @@ class RoomPanel extends Component {
         let { userId, setSelectedRoomId, socket, onlineRooms } = this.props;
         let btnLeft = 'btn-left';  
         let { from, activeRoomId, rooms, showListFriend, showMessage, listFriend, listWait, showAllFriend, notFriendSearch, friendSearch, search } = this.state;
-        console.log("lastMessage1: ",rooms);
+        //console.log("lastMessage1: ",rooms);
         return (
             <div className="inbox_chat">
                 <div className="search-box-wrapper">
