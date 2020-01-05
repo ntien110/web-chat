@@ -23,33 +23,43 @@ class Message extends Component {
             message.scrollTo(0, message.scrollHeight);
         }
     }
+
     render() {
         let allConstants = this.allConstants;
         let messages = this.props.Messages ? this.props.Messages : [];
-        let { stickers, colorTheme} = this.props;
-        //console.log(stickers);
-        //console.log("messages:", messages);
+        let { stickers, colorTheme } = this.props;
+        //console.log(read);
+
+        let i = messages.length - 1;
+        let pos = '';
+        for (let j = i; j >= 0; j--) {
+            if (messages[j].From === this.props.userId && messages[j].seen.length >= 2) {
+                pos = j;
+                break;
+            }
+        }
         return (
             <div
                 className="msg_history"
                 id="message"
-                // ref={(scroller) => {
-                //     this.scroller = scroller;
-                // }}
-                // onScroll={this.handleScroll}
+                ref={(scroller) => {
+                    this.scroller = scroller;
+                }}
+                onScroll={this.handleScroll}
             >
+
                 {
                     messages.map((msg, index) => {
                         let body = '';
-                        let read = false;
-                        if (msg.From === this.props.userId){
-                            for (let i in msg.seen){
-                                if (msg.seen[i] !== this.props.userId){
-                                    read = true;
-                                    break;
-                                }
-                            }
-                        }
+                        // let read = false;
+                        // if (msg.From === this.props.userId){
+                        //     for (let i in msg.seen){
+                        //         if (msg.seen[i] !== this.props.userId){
+                        //             read = true;
+                        //             break;
+                        //         }
+                        //     }
+                        // }
                         //console.log("kk",msg.Type);
                         if (msg.Type === 'Sticker') {
                             for (let i in stickers) {
@@ -80,7 +90,9 @@ class Message extends Component {
                                                     :
                                                     <img src={body} alt="Cinque Terre" width="100px" height="100px" />
                                             }
-                                            <span className="time_date" >{allConstants.formatDates(msg.time)}</span>
+                                            <span className="time_date" >
+                                                {allConstants.formatDates(msg.time)}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -98,11 +110,11 @@ class Message extends Component {
                                         <span className="time_date" >
                                             {allConstants.formatDates(msg.time)}
                                             {
-                                                read ?
-                                                    <div style={{'float':'right'}}>
+                                                (pos === index) ?
+                                                    <div style={{ 'float': 'right' }}>
                                                         <img src={this.props.avatar} className="img-circle" alt="Cinque Terre" width="10px" height="10px" />
                                                     </div>
-                                                :
+                                                    :
                                                     ''
                                             }
                                         </span>

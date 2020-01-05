@@ -1,11 +1,11 @@
 class Constants {
   constructor() {
       // all the URLs
-      // this.link='blooming-cove-97725.herokuapp.com';
-      // this.url = `https://${this.link}`;
+      this.url = `[replace backend server's URL in here]`;
+      // example: this.url = `https://gentle-springs-53681.herokuapp.com`;
       
-      this.link='localhost';
-      this.url = `https://${this.link}:3001`;
+      // this.link='localhost';
+      // this.url = `https://${this.link}:3001`;
 
 
       this.webSocketServer = this.url;
